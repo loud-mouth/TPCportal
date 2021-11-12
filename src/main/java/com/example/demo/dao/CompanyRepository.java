@@ -5,4 +5,5 @@ import com.example.demo.models.Company;
 
 public interface CompanyRepository {
     Company getCompanyByEmailId(String emailId);
+    Company saveCompany(Company company);
 }

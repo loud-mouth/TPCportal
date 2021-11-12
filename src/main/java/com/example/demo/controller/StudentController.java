@@ -85,10 +85,10 @@ public class StudentController {
     {
         ModelAndView mv = new ModelAndView();
         if(logged_in(session) == true) {
-            mv.addObject("error", "You are already looged in. Log out before registering.");
+            mv.addObject("error", "You are already logged in. Log out before registering.");
             if(session.getAttribute("student") != null)
             {
-                mv.setViewName("dashoard");
+                mv.setViewName("dashboard");
             }
             else
             {

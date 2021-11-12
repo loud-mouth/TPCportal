@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+<body>
+<div th:if="${error != null}" th:text="${error}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
+    </div>
+</div>
+
+
+<div id="login">
+    <h3 class="text-center text-white pt-5">Login form</h3>
+    <div class="container">
+        <div id="register-row" class="row justify-content-center align-items-center">
+            <div id="register-column" class="col-md-6">
+                <div id="register-box" class="col-md-12">
+                    <form id="register-form" class="form" action="/company/register" method="post">
+                        <h3 class="text-center text-info">Company  Registration</h3>
+                        <div class="form-group">
+                            <label for="name" class="text-info">Company Name:</label><br>
+                            <input type="text" name="name" id="name" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="emailid" class="text-info">EmailId:</label><br>
+                            <input type="text" name="emailid" id="emailid" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="text-info">Create a Password:</label><br>
+                            <input type="password" name="password" id="password" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="headoffice" class="text-info">Head Office:</label><br>
+                            <input type="text" name="headoffice" id="headoffice" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="repcontact" class="text-info">Phone Number (For Company Representative):</label><br>
+                            <input type="text" name="repcontact" id="repcontact" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="website" class="text-info">Website Link:</label><br>
+                            <input type="text" name="website" id="website" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

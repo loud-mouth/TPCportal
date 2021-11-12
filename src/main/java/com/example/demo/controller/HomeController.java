@@ -36,10 +36,6 @@ public class HomeController {
             return mv;
         }
         mv.setViewName("home");
-        String anant = "ANANT";
-        mv.addObject("namer", anant);
-        String aryan = "ARYAN";
-        mv.addObject("name", aryan);
         return mv;
     }
 }

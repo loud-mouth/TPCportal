@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
+</head>
+<body>
+<div th:if="${error != null}" th:text="${error}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
+    </div>
+</div>
+
+<div th:if="${message != null}" th:text="${message}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
+    </div>
+</div>
+
+<div id="makejob">
+    <h3 class="text-center text-white pt-5">Create a Job Profile</h3>
+    <div class="container">
+        <div id="register-row" class="row justify-content-center align-items-center">
+            <div id="register-column" class="col-md-6">
+                <div id="register-box" class="col-md-12">
+                    <form id="job-creation-form" class="form" action="/company/makeJobProfile" method="post">
+                        <h3 class="text-center text-info">Job Profile Registration</h3>
+                        <div>
+                            <input value="1" name="jobProfileId" id="jobProfileId" type="hidden">
+                        </div>
+                        <div>
+                            <input th:value="${companyId}" name="companyId" id="companyId" type="hidden">
+                        </div>
+                        <div class="form-group">
+                            <label for="cgpaCutoff" class="text-info">CGPA Cutoff:</label><br>
+                            <input type="number" step=0.01 min=0.00 max=10.00 name="cgpaCutoff" id="cgpaCutoff" class="form-control">
+                        </div>
+                        <div>
+                            <input value="1" name="numberOfRounds" id="numberOfRounds" type="hidden">
+                        </div>
+                        <div>
+                            <label for="typeOfProfile">Type of Profile:</label>
+                            <select id="typeOfProfile" name="typeOfProfile">
+                                <option value="internship">Internship</option>
+                                <option value="placement">Placement</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="academicSession" class="text-info">For the Academic Session(enter 2021 for 2021-22):</label><br>
+                            <input type="number" name="academicSession" id="academicSession" class="form-control" value="2021">
+                        </div>
+                        <div class="form-group">
+                            <label for="stipend" class="text-info">Stipend (Per month CTC in INR):</label><br>
+                            <input type="number" step=0.01 min=0.00 name="stipend" id="stipend" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="position" class="text-info">Position Offered inside the company:</label><br>
+                            <input type="text" name="position" id="position" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="description" class="text-info">Description of the job (in < 50 words):</label><br>
+                            <input type="text" name="description" id="description" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="location" class="text-info">Location of Workplace (mention Online if necessary):</label><br>
+                            <input type="text" name="location" id="location" class="form-control">
+                        </div>
+                        <div class="form-group">
+                            <label for="duration" class="text-info">Duration of Work in months (mention 0 if FT job):</label><br>
+                            <input type="text" name="duration" id="duration" class="form-control">
+                        </div>
+
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

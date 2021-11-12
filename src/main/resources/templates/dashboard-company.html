@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+
 </head>
 <body>
+<div th:if="${error != null}" th:text="${error}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
+    </div>
+</div>
+
+<div th:if="${message != null}" th:text="${message}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
+    </div>
+</div>
 <p>HELOOOOOOO</p>
+<a href="/company/makeJobProfile/">Make Job Profile</a>
 </body>
 </html>
