@@ -27,7 +27,12 @@ public class HomeController {
         if(logged_in(session))
         {
             mv.addObject("error", "You are already logged in. Redirecting to dashboard...\n");
-            mv.setViewName("dashboard");
+
+            if(session.getAttribute("student") != null)
+                 mv.setViewName("dashboard");
+             else
+                 mv.setViewName("dashboard-company");
+
             return mv;
         }
         mv.setViewName("home");

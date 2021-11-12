@@ -1,9 +1,11 @@
 //done
-package com.example.demo;
+package com.example.demo.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.sql.Date;
 
 @Data
 @AllArgsConstructor
@@ -16,9 +18,8 @@ public class Student {
     private String password;
 
     private String address;
-    private String dob;
+    private Date dob;
     private String phoneNumber;
-    private int guardianId;
 
     private int academicSession;
     private String branch;
@@ -85,20 +86,12 @@ public class Student {
         this.course = course;
     }
 
-    public String getDob() {
+    public Date getDob() {
         return dob;
     }
 
-    public void setDob(String dob) {
+    public void setDob(Date dob) {
         this.dob = dob;
-    }
-
-    public int getGuardianId() {
-        return guardianId;
-    }
-
-    public void setGuardianId(int guardianId) {
-        this.guardianId = guardianId;
     }
 
     public float getCgpa() {

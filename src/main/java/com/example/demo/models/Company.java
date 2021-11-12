@@ -1,5 +1,5 @@
 //done
-package com.example.demo;
+package com.example.demo.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,10 +12,18 @@ public class Company {
     private int companyId;
     private String name;
     private String repContact;
-    private String email;
+    private String emailId;
     private String password;
     private String headOffice;
     private String website;
+
+    public String getEmailId() {
+        return emailId;
+    }
+
+    public void setEmailId(String emailId) {
+        this.emailId = emailId;
+    }
 
     public int getCompanyId() {
         return companyId;
@@ -55,14 +63,6 @@ public class Company {
 
     public void setWebsite(String website) {
         this.website = website;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getPassword() {

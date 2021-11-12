@@ -1,5 +1,5 @@
 //done
-package com.example.demo;
+package com.example.demo.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
