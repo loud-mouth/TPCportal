@@ -12,6 +12,15 @@ public class Interviewer {
     private int interviewerId;
     private String name;
     private String phoneNumber;
+    private int companyId;
+
+    public int getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(int companyId) {
+        this.companyId = companyId;
+    }
 
     public int getInterviewerId() {
         return interviewerId;

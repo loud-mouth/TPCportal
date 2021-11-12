@@ -1,9 +1,8 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.InterviewerRepository;
 import com.example.demo.dao.JobProfileRepository;
-import com.example.demo.models.Guardian;
-import com.example.demo.models.JobProfile;
-import com.example.demo.models.Student;
+import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -18,7 +17,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import javax.naming.CompositeName;
 import javax.servlet.http.HttpSession;
 
-import com.example.demo.models.Company;
 import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
@@ -33,6 +31,9 @@ public class CompanyController {
     @Autowired
     JobProfileRepository jobprofilerepo;
 
+    @Autowired
+    InterviewerRepository interviewerrepo;
+
     public boolean logged_in(HttpSession session)
     {
         if(session.getAttribute("student") == null && session.getAttribute("company") == null)
@@ -40,6 +41,52 @@ public class CompanyController {
             return false;
         }
         return true;
+    }
+
+    @PostMapping("/company/addInterviewer")
+    public ModelAndView addInterviewerPost(@ModelAttribute("Interviewer") Interviewer interviewer,  HttpSession session)
+    {
+        ModelAndView mv = new ModelAndView();
+        System.out.println(interviewer.getName() + " || " + interviewer.getCompanyId() + " || " + interviewer.getPhoneNumber());
+        interviewer = interviewerrepo.saveInterviewer(interviewer);
+        if(interviewer.getInterviewerId() == -1)
+        {
+            mv.addObject("error", "Interviewer Details Could Not be Added.");
+        }
+        else
+        {
+            mv.addObject("message", "Interviewer Details Added Successfully");
+        }
+        Company company= (Company)session.getAttribute("company");
+        List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
+        mv.addObject("activejobs", activejobs);
+        mv.setViewName("dashboard-company");
+        return mv;
+    }
+
+    @GetMapping("/company/addInterviewer")
+    public ModelAndView addInterviewerGet(HttpSession session)
+    {
+        ModelAndView mv = new ModelAndView();
+        if(!logged_in(session))
+        {
+            mv.setViewName("home");
+            return mv;
+        }
+        else if(session.getAttribute("student") != null)
+        {
+            Student student = (Student)session.getAttribute("student");
+            mv.addObject("student", student);
+            List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
+            mv.addObject("availablejobs", availablejobs);
+            mv.setViewName("dashboard");
+            return mv;
+        }
+
+        Company company = (Company)session.getAttribute("company");
+        mv.addObject("companyId", company.getCompanyId());
+        mv.setViewName("addInterviewer");
+        return mv;
     }
 
     @PostMapping("/company/logout")
