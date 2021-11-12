@@ -22,6 +22,7 @@ import com.example.demo.models.Company;
 import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
+import java.util.List;
 
 @Controller
 public class CompanyController {
@@ -29,7 +30,8 @@ public class CompanyController {
     @Autowired
     CompanyRepository companyrepo;
 
-
+    @Autowired
+    JobProfileRepository jobprofilerepo;
 
     public boolean logged_in(HttpSession session)
     {
@@ -38,6 +40,31 @@ public class CompanyController {
             return false;
         }
         return true;
+    }
+
+    @PostMapping("/company/logout")
+    public ModelAndView Logoutprocess(HttpSession session)
+    {
+        ModelAndView mv = new ModelAndView();
+        if(!logged_in(session))
+        {
+            mv.setViewName("home");
+            return mv;
+        }
+        else if(session.getAttribute("student") != null)
+        {
+            Student student = (Student)session.getAttribute("student");
+            mv.addObject("student", student);
+            List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
+            mv.addObject("availablejobs", availablejobs);
+            mv.setViewName("dashboard");
+            return mv;
+        }
+        session.removeAttribute("company");
+        session.invalidate();
+        mv.addObject("message", "Logged Out Successfully.");
+        mv.setViewName("home");
+        return mv;
     }
 
     @PostMapping("/company/login")
@@ -49,7 +76,6 @@ public class CompanyController {
     {
 
         ModelAndView mv = new ModelAndView();
-        Company student = new Company();
         Company maybe = new Company();
         maybe = companyrepo.getCompanyByEmailId(username);
 
@@ -71,9 +97,10 @@ public class CompanyController {
 
         session.setAttribute("company", maybe);
         mv.addObject("company", maybe);
-
+        List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(maybe.getCompanyId());
+        System.out.println("Number of active jobs for this company are " + activejobs.size());
+        mv.addObject("activejobs", activejobs);
         mv.setViewName("dashboard-company");
-
         return mv;
     }
 
@@ -86,10 +113,17 @@ public class CompanyController {
             mv.addObject("error", "You are already logged in. Log out before registering.");
             if(session.getAttribute("student") != null)
             {
+                Student student = (Student)session.getAttribute("student");
+                mv.addObject("student", student);
+                List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
+                mv.addObject("availablejobs", availablejobs);
                 mv.setViewName("dashboard");
             }
             else
             {
+                Company company= (Company)session.getAttribute("company");
+                List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
+                mv.addObject("activejobs", activejobs);
                 mv.setViewName("dashboard-company");
             }
 

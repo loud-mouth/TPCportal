@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -23,7 +23,28 @@
                   aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
     </div>
 </div>
-<p>HELOOOOOOO</p>
-<a href="/company/makeJobProfile/">Make Job Profile</a>
+
+<form action="/company/logout" method="post">
+    <input type="submit" name="logout" value="Logout" />
+</form>
+
+<div id="makejob">
+    <h3 class="text-center text-white pt-5">Create a Job Profile</h3>
+    <div class="container">
+        <div id="login-row" class="row justify-content-center align-items-center">
+            <div id="login-column" class="col-md-6">
+                <div id="login-box" class="col-md-12">
+                    <a href="/company/makeJobProfile/">Make Job Profile</a>
+                    <span th:text="${activejobs.size()}">Size</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
 </body>
 </html>

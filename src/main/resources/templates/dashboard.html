@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -10,6 +10,27 @@
 
 </head>
 <body>
+<div th:if="${error != null}" th:text="${error}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
+    </div>
+</div>
 
+<div th:if="${message != null}" th:text="${message}">
+    <div class="alert alert-warning alert-dismissible" role="alert">
+			<span type="button" class="close" data-dismiss="alert"
+                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
+    </div>
+</div>
+
+<form action="/student/logout" method="post">
+    <input type="submit" name="logout" value="Logout" />
+</form>
+
+<body>
+    <div th:each="job : ${availablejobs}">
+        <strong><span th:text="${job.getPosition()}">Position</span></strong>
+    </div>
 </body>
 </html>
