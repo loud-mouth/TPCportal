@@ -18,6 +18,8 @@ import com.example.demo.models.Company;
 import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
+import java.util.Arrays;
+import java.util.List;
 
 @Controller
 public class JobProfileController {
@@ -64,16 +66,28 @@ public class JobProfileController {
         return mv;
     }
 
+    private static final String SEARCH_TYPES = "searchTypes";
+
+    @ModelAttribute()
+    public void initValues(Model model) {
+        model.addAttribute(SEARCH_TYPES, Arrays.asList("cse", "bme"));
+    }
+
     @PostMapping("/company/makeJobProfile")
     public ModelAndView JobProfileRegister(
             @ModelAttribute("JobProfile") JobProfile jobProfile,
             @ModelAttribute("PPT") PPT ppt,
+            @RequestParam List<String> tickedBranches,
             HttpSession session
     )
     {
-
+        for(String field : tickedBranches)
+        {
+            System.out.println("batman" + field);
+        }
         ModelAndView mv = new ModelAndView();
         JobProfile savedCopy = jobprofilerepo.saveJobProfile(jobProfile);
+        System.out.println("New Job Profile created with id "+savedCopy.getJobProfileId()+" and position "+savedCopy.getPosition());
         if(savedCopy.getCompanyId() == -1)
         {
             mv.addObject("error", "incorrect details were provided");
@@ -81,7 +95,6 @@ public class JobProfileController {
             return mv;
         }
         ppt.setJobProfileId(savedCopy.getJobProfileId());
-
         PPT savedPPT = pptrepo.savePPT(ppt);
         if(savedPPT.getJobProfileId() == -1)
         {

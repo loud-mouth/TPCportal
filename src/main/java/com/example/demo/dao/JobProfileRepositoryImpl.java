@@ -21,6 +21,7 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
     private static  final String getJobProfilesByCompanyId = "SELECT * FROM JobProfile WHERE companyId=?";
     private static final String getJobProfilesAvailableToStudent = "SELECT * FROM JobProfile WHERE typeOfProfile=? AND academicSession=? AND cgpaCutoff<=?";
     private static  final String getJobProfilesByJobProfileId = "SELECT * FROM JobProfile WHERE jobProfileId=?";
+    private static final String helpMe = "SELECT * FROM JobProfile WHERE companyId=? and position=? and duration=?";
 
 
     @Autowired
@@ -35,7 +36,22 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
                     jobProfile.getTypeOfProfile(), jobProfile.getAcademicSession(), jobProfile.getStipend(), jobProfile.getPosition(),
                     jobProfile.getDescription(), jobProfile.getLocation(), jobProfile.getDuration());
 
-            return jobProfile;
+            return jdbcTemplate.queryForObject(helpMe,(rs,rowNum)->{
+                JobProfile savedCopy = new JobProfile();
+                savedCopy.setJobProfileId(rs.getInt(1));
+                savedCopy.setCompanyId(rs.getInt(2));
+                savedCopy.setCgpaCutoff(rs.getFloat(3));
+                savedCopy.setNumberOfRounds(rs.getInt(4));
+                savedCopy.setTypeOfProfile(rs.getString(5));
+                savedCopy.setAcademicSession(rs.getInt(6));
+                savedCopy.setStipend(rs.getInt(7));
+                savedCopy.setPosition(rs.getString(8));
+                savedCopy.setDescription(rs.getString(9));
+                savedCopy.setLocation(rs.getString(10));
+                savedCopy.setDuration(rs.getString(11));
+                System.out.println("Returning and the Job Profile Object that was created!");
+                return savedCopy;
+            }, jobProfile.getCompanyId(), jobProfile.getPosition(), jobProfile.getDescription());
         }
         catch(DataAccessException e)
         {

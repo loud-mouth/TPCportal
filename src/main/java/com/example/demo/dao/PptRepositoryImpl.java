@@ -19,6 +19,7 @@ public class PptRepositoryImpl implements PptRepository {
     {
         try
         {
+            System.out.println("saving PPT woth attr. "+ppt.getJobProfileId()+", "+ppt.getDateTime()+", "+ppt.getMeetingLink());
             jdbcTemplate.update(savePPT, ppt.getJobProfileId(), ppt.getDateTime(), ppt.getMeetingLink());
             return ppt;
         }

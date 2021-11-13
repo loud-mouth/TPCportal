@@ -111,4 +111,6 @@ public class JobProfile {
     public void setNumberOfRounds(int numberOfRounds) {
         this.numberOfRounds = numberOfRounds;
     }
+
+    public boolean initialRound() { return ((this.numberOfRounds) == 1); }
 }
