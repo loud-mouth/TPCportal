@@ -8,17 +8,18 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CodingTestScores {
-    private int testId;
+public class TestScores {
+    private int jobProfileId;
     private int studentId;
+    private int roundNumber;
     private int score;
 
-    public int getTestId() {
-        return testId;
+    public int getJobProfileId() {
+        return jobProfileId;
     }
 
-    public void setTestId(int testId) {
-        this.testId = testId;
+    public void setJobProfileId(int jobProfileId) {
+        this.jobProfileId = jobProfileId;
     }
 
     public int getStudentId() {
@@ -27,6 +28,14 @@ public class CodingTestScores {
 
     public void setStudentId(int studentId) {
         this.studentId = studentId;
+    }
+
+    public int getRoundNumber() {
+        return roundNumber;
+    }
+
+    public void setRoundNumber(int roundNumber) {
+        this.roundNumber = roundNumber;
     }
 
     public int getScore() {

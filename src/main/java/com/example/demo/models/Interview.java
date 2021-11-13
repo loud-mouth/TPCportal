@@ -20,7 +20,6 @@ public class Interview {
     private int roundNumber;
     private String startDateTime;
     private String endDateTime;
-    private int score;
 
 
     public int getStudentId() {
@@ -37,14 +36,6 @@ public class Interview {
 
     public void setJobProfileId(int jobProfileId) {
         this.jobProfileId = jobProfileId;
-    }
-
-    public int getScore() {
-        return score;
-    }
-
-    public void setScore(int score) {
-        this.score = score;
     }
 
     public int getInterviewId() {
