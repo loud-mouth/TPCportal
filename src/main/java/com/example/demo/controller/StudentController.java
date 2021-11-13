@@ -23,8 +23,10 @@ import javax.servlet.http.HttpSession;
 import com.example.demo.models.Student;
 import com.example.demo.dao.StudentRepository;
 
+import com.example.demo.controller.LoginModule;
 import java.sql.Date;
 import java.util.List;
+import java.util.Objects;
 
 
 @Controller
@@ -40,6 +42,9 @@ public class StudentController {
     @Autowired
     JobProfileRepository jobprofilerepo;
 
+    @Autowired
+    LoginModule loginmodule;
+
 
     public boolean logged_in(HttpSession session)
     {
@@ -53,24 +58,13 @@ public class StudentController {
     @PostMapping("/student/logout")
     public ModelAndView Logoutprocess(HttpSession session)
     {
-        ModelAndView mv = new ModelAndView();
-        if(!logged_in(session))
+        ModelAndView mv = loginmodule.confirm_login_as(session, "student");
+        if(!mv.isEmpty())
         {
-            mv.setViewName("home");
             return mv;
         }
-        else if(session.getAttribute("company") != null)
-        {
-            mv.setViewName("dashboard-company");
-            Company company= (Company)session.getAttribute("company");
-            List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
-            mv.addObject("activejobs", activejobs);
-            return mv;
-        }
-        session.removeAttribute("student");
-        session.invalidate();
+        mv = loginmodule.redirect("home", session);
         mv.addObject("message", "Logged Out Successfully.");
-        mv.setViewName("home");
         return mv;
     }
 
@@ -82,7 +76,6 @@ public class StudentController {
                                 )
     {
 
-        ModelAndView mv = new ModelAndView();
         Student student = new Student();
         Student maybe = new Student();
         maybe = studentrepo.getStudentByStudentId(Integer.parseInt(username));
@@ -90,7 +83,7 @@ public class StudentController {
         if(maybe.getStudentId() == -1)
         {
             System.out.println("Incorrect creds\n");
-            mv.setViewName("home");
+            ModelAndView mv = loginmodule.redirect("home", session);
             mv.addObject("error", "The entered Student-Id does not exist in the database.\n");
             return mv;
         }
@@ -98,46 +91,25 @@ public class StudentController {
         if(!maybe.getPassword().equals(password))
         {
             System.out.println(maybe.getPassword() + " || " + password + " || " + "BAD PASSWORD\n");
-            mv.setViewName("home");
+            ModelAndView mv = loginmodule.redirect("home", session);
             mv.addObject("error", "The password is incorrect");
             return mv;
         }
 
         session.setAttribute("student", maybe);
-        mv.addObject("studentName", maybe.getName());
-        mv.addObject("student", student);
-        List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(maybe);
-        mv.addObject("availablejobs", availablejobs);
-        mv.setViewName("dashboard");
-
+        ModelAndView mv = loginmodule.redirect("student", session);
         return mv;
     }
 
     @GetMapping("/student/register")
     public ModelAndView studentRegister(HttpSession session)
     {
-        ModelAndView mv = new ModelAndView();
-        if(logged_in(session) == true) {
-            mv.addObject("error", "You are already logged in. Log out before registering.");
-            if(session.getAttribute("student") != null)
-            {
-                Student student = (Student)session.getAttribute("student");
-                mv.addObject("student", student);
-                List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-                mv.addObject("availablejobs", availablejobs);
-                mv.setViewName("dashboard");
-            }
-            else
-            {
-                Company company= (Company)session.getAttribute("company");
-                List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
-                mv.addObject("activejobs", activejobs);
-                mv.setViewName("dashboard-company");
-            }
-
-            return mv;
+        ModelAndView checkCreds = loginmodule.confirm_login_as(session, "notLoggedIn");
+        if(!checkCreds.isEmpty()) {
+            return checkCreds;
         }
 
+        ModelAndView mv = new ModelAndView();
         mv.setViewName("studentRegister");
         return mv;
     }
@@ -206,8 +178,8 @@ public class StudentController {
             return mv;
         }
 
+        mv = loginmodule.redirect("home", session);
         mv.addObject("message", "You have been successfully registered");
-        mv.setViewName("home");
         return mv;
     }
 

@@ -20,6 +20,9 @@ public class HomeController {
     @Autowired
     JobProfileRepository jobprofilerepo;
 
+    @Autowired
+    LoginModule loginmodule;
+
     public boolean logged_in(HttpSession session)
     {
         if(session.getAttribute("student") == null && session.getAttribute("company") == null)
@@ -32,28 +35,13 @@ public class HomeController {
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home(HttpSession session)
     {
-        ModelAndView mv = new ModelAndView();
-        if(logged_in(session))
+        ModelAndView mv = loginmodule.confirm_login_as(session, "notLoggedIn");
+        if(!mv.isEmpty())
         {
             mv.addObject("error", "You are already logged in. Redirecting to dashboard...\n");
-
-            if(session.getAttribute("student") != null){
-                Student student = (Student)session.getAttribute("student");
-                mv.addObject("student", student);
-                List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-                mv.addObject("availablejobs", availablejobs);
-                mv.setViewName("dashboard");
-            }
-             else{
-                 Company company= (Company)session.getAttribute("company");
-                    List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
-                    mv.addObject("activejobs", activejobs);
-                    mv.setViewName("dashboard-company");
-            }
-
             return mv;
         }
-        mv.setViewName("home");
+        mv = loginmodule.redirect("home", session);
         return mv;
     }
 }

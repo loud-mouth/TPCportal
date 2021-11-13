@@ -19,6 +19,7 @@ import javax.naming.CompositeName;
 import javax.servlet.http.HttpSession;
 
 import com.example.demo.models.Company;
+import com.example.demo.models.Company;
 import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
@@ -33,16 +34,19 @@ public class JobProfileController {
     @Autowired
     JobProfileRepository jobprofilerepo;
 
+    @Autowired
+    LoginModule loginmodule;
+
     @GetMapping("/company/makeJobProfile")
     public ModelAndView makeJobProfile(HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
-        if(!logged_in_as_company(session))
+        ModelAndView checkCreds = loginmodule.confirm_login_as(session, "company");
+        if(!checkCreds.isEmpty())
         {
-            mv.addObject("error", "You are not authorised to access that page.");
-            mv.setViewName("home");
-            return mv;
+            return checkCreds;
         }
+
         mv.setViewName("makeJobProfile");
         Company company = new Company();
         company = (Company)(session.getAttribute("company"));
@@ -64,8 +68,8 @@ public class JobProfileController {
             mv.setViewName("makeJobProfile");
             return mv;
         }
+        mv = loginmodule.redirect("company", session);
         mv.addObject("message", "Job Profile for " + savedCopy.getPosition() + " has been successfully added!");
-        mv.setViewName("dashboard-company");
         return mv;
     }
 }

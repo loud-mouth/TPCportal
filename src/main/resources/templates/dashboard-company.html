@@ -40,7 +40,9 @@
                     <br>
                     <a href="/company/addInterviewer/">Add an Interviewer</a>
                     <br>
-                    <span th:text="${activejobs.size()}">Size</span>
+                    <div th:if="${!activejobs.isEmpty()}">
+                        <span th:text="${activejobs.size()}">Size</span>
+                    </div>
                 </div>
             </div>
         </div>

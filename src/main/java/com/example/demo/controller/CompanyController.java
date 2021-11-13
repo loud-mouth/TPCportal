@@ -34,6 +34,9 @@ public class CompanyController {
     @Autowired
     InterviewerRepository interviewerrepo;
 
+    @Autowired
+    LoginModule loginmodule;
+
     public boolean logged_in(HttpSession session)
     {
         if(session.getAttribute("student") == null && session.getAttribute("company") == null)
@@ -49,6 +52,7 @@ public class CompanyController {
         ModelAndView mv = new ModelAndView();
         System.out.println(interviewer.getName() + " || " + interviewer.getCompanyId() + " || " + interviewer.getPhoneNumber());
         interviewer = interviewerrepo.saveInterviewer(interviewer);
+        mv = loginmodule.redirect("company", session);
         if(interviewer.getInterviewerId() == -1)
         {
             mv.addObject("error", "Interviewer Details Could Not be Added.");
@@ -57,10 +61,6 @@ public class CompanyController {
         {
             mv.addObject("message", "Interviewer Details Added Successfully");
         }
-        Company company= (Company)session.getAttribute("company");
-        List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
-        mv.addObject("activejobs", activejobs);
-        mv.setViewName("dashboard-company");
         return mv;
     }
 
@@ -68,18 +68,9 @@ public class CompanyController {
     public ModelAndView addInterviewerGet(HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
-        if(!logged_in(session))
+        mv = loginmodule.confirm_login_as(session, "company");
+        if(!mv.isEmpty())
         {
-            mv.setViewName("home");
-            return mv;
-        }
-        else if(session.getAttribute("student") != null)
-        {
-            Student student = (Student)session.getAttribute("student");
-            mv.addObject("student", student);
-            List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-            mv.addObject("availablejobs", availablejobs);
-            mv.setViewName("dashboard");
             return mv;
         }
 
@@ -92,25 +83,13 @@ public class CompanyController {
     @PostMapping("/company/logout")
     public ModelAndView Logoutprocess(HttpSession session)
     {
-        ModelAndView mv = new ModelAndView();
-        if(!logged_in(session))
+        ModelAndView mv = loginmodule.confirm_login_as(session, "company");
+        if(!mv.isEmpty())
         {
-            mv.setViewName("home");
             return mv;
         }
-        else if(session.getAttribute("student") != null)
-        {
-            Student student = (Student)session.getAttribute("student");
-            mv.addObject("student", student);
-            List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-            mv.addObject("availablejobs", availablejobs);
-            mv.setViewName("dashboard");
-            return mv;
-        }
-        session.removeAttribute("company");
-        session.invalidate();
+        mv = loginmodule.redirect("home", session);
         mv.addObject("message", "Logged Out Successfully.");
-        mv.setViewName("home");
         return mv;
     }
 
@@ -143,40 +122,18 @@ public class CompanyController {
         }
 
         session.setAttribute("company", maybe);
-        mv.addObject("company", maybe);
-        List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(maybe.getCompanyId());
-        System.out.println("Number of active jobs for this company are " + activejobs.size());
-        mv.addObject("activejobs", activejobs);
-        mv.setViewName("dashboard-company");
+        mv = loginmodule.redirect("company", session);
         return mv;
     }
 
     @GetMapping("/company/register")
     public ModelAndView companyRegister(HttpSession session)
     {
-        ModelAndView mv = new ModelAndView();
-
-        if(logged_in(session) == true) {
-            mv.addObject("error", "You are already logged in. Log out before registering.");
-            if(session.getAttribute("student") != null)
-            {
-                Student student = (Student)session.getAttribute("student");
-                mv.addObject("student", student);
-                List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-                mv.addObject("availablejobs", availablejobs);
-                mv.setViewName("dashboard");
-            }
-            else
-            {
-                Company company= (Company)session.getAttribute("company");
-                List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
-                mv.addObject("activejobs", activejobs);
-                mv.setViewName("dashboard-company");
-            }
-
+        ModelAndView mv = loginmodule.confirm_login_as(session, "company");
+        if(!mv.isEmpty())
+        {
             return mv;
         }
-
         mv.setViewName("companyRegister");
         return mv;
     }
