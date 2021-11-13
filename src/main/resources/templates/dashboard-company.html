@@ -41,7 +41,17 @@
                     <a href="/company/addInterviewer/">Add an Interviewer</a>
                     <br>
                     <div th:if="${!activejobs.isEmpty()}">
-                        <span th:text="${activejobs.size()}">Size</span>
+                        <div th:each="job : ${activejobs}">
+
+                                <div>
+                                    <span th:text="${job.getPosition}">Position</span>
+                                </div>
+                                <div>
+                                    <form id="login-form" class="form" method="post" th:action="@{/company/shortlist/{path}(path=${job.getJobProfileId})}">
+                                        <input type="submit" name="status" value="Status" />
+                                    </form>
+                                </div>
+                        </div>
                     </div>
                 </div>
             </div>

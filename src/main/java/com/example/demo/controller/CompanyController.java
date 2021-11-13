@@ -37,15 +37,6 @@ public class CompanyController {
     @Autowired
     LoginModule loginmodule;
 
-    public boolean logged_in(HttpSession session)
-    {
-        if(session.getAttribute("student") == null && session.getAttribute("company") == null)
-        {
-            return false;
-        }
-        return true;
-    }
-
     @PostMapping("/company/addInterviewer")
     public ModelAndView addInterviewerPost(@ModelAttribute("Interviewer") Interviewer interviewer,  HttpSession session)
     {
@@ -129,7 +120,7 @@ public class CompanyController {
     @GetMapping("/company/register")
     public ModelAndView companyRegister(HttpSession session)
     {
-        ModelAndView mv = loginmodule.confirm_login_as(session, "company");
+        ModelAndView mv = loginmodule.confirm_login_as(session, "notLoggedIn");
         if(!mv.isEmpty())
         {
             return mv;

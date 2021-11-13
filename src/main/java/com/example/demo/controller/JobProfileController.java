@@ -1,17 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.JobProfileRepository;
-import com.example.demo.models.Guardian;
-import com.example.demo.models.JobProfile;
-import com.example.demo.models.Student;
+import com.example.demo.dao.PptRepository;
+import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -19,23 +15,37 @@ import javax.naming.CompositeName;
 import javax.servlet.http.HttpSession;
 
 import com.example.demo.models.Company;
-import com.example.demo.models.Company;
 import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
 
 @Controller
 public class JobProfileController {
-    public boolean logged_in_as_company(HttpSession session)
-    {
-        return session.getAttribute("student") == null && session.getAttribute("company") != null;
-    }
 
     @Autowired
     JobProfileRepository jobprofilerepo;
 
     @Autowired
     LoginModule loginmodule;
+
+    @Autowired
+    PptRepository pptrepo;
+
+//    @Autowired
+
+
+    @PostMapping("/company/shortlist/{id}")
+    public ModelAndView showShortlist(@PathVariable("id") int id, HttpSession session)
+    {
+        System.out.println("Accessing job profile with id = " + id);
+        JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(id);
+        ModelAndView mv = new ModelAndView();
+//        Shortlist shortList = shortlistrepo.getShortListByJobProfile(jobProfile);
+        mv.addObject("jobProfile", jobProfile);
+//        mv.addObject("shortlist", shortlist);
+        mv.setViewName("shortlist");
+        return mv;
+    }
 
     @GetMapping("/company/makeJobProfile")
     public ModelAndView makeJobProfile(HttpSession session)
@@ -57,12 +67,23 @@ public class JobProfileController {
     @PostMapping("/company/makeJobProfile")
     public ModelAndView JobProfileRegister(
             @ModelAttribute("JobProfile") JobProfile jobProfile,
+            @ModelAttribute("PPT") PPT ppt,
             HttpSession session
     )
     {
+
         ModelAndView mv = new ModelAndView();
         JobProfile savedCopy = jobprofilerepo.saveJobProfile(jobProfile);
         if(savedCopy.getCompanyId() == -1)
+        {
+            mv.addObject("error", "incorrect details were provided");
+            mv.setViewName("makeJobProfile");
+            return mv;
+        }
+        ppt.setJobProfileId(savedCopy.getJobProfileId());
+
+        PPT savedPPT = pptrepo.savePPT(ppt);
+        if(savedPPT.getJobProfileId() == -1)
         {
             mv.addObject("error", "incorrect details were provided");
             mv.setViewName("makeJobProfile");

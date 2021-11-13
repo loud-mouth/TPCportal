@@ -23,15 +23,6 @@ public class HomeController {
     @Autowired
     LoginModule loginmodule;
 
-    public boolean logged_in(HttpSession session)
-    {
-        if(session.getAttribute("student") == null && session.getAttribute("company") == null)
-        {
-            return false;
-        }
-        return true;
-    }
-
     @RequestMapping(value = "home", method = RequestMethod.GET)
     public ModelAndView home(HttpSession session)
     {

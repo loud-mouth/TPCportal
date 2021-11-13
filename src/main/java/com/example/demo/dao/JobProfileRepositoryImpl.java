@@ -20,6 +20,9 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
             "VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static  final String getJobProfilesByCompanyId = "SELECT * FROM JobProfile WHERE companyId=?";
     private static final String getJobProfilesAvailableToStudent = "SELECT * FROM JobProfile WHERE typeOfProfile=? AND academicSession=? AND cgpaCutoff<=?";
+    private static  final String getJobProfilesByJobProfileId = "SELECT * FROM JobProfile WHERE jobProfileId=?";
+
+
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -62,6 +65,27 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
             System.out.println("Found one!");
             return jobProfile;
         }, companyId);
+    }
+
+    @Override
+    public JobProfile getJobProfilesByJobProfileId(int jobProfileId) {
+        System.out.println("Searching profiles for jobProfile number " + jobProfileId);
+        return jdbcTemplate.queryForObject(getJobProfilesByJobProfileId,(rs,rowNum)->{
+            JobProfile jobProfile = new JobProfile();
+            jobProfile.setJobProfileId(rs.getInt(1));
+            jobProfile.setCompanyId(rs.getInt(2));
+            jobProfile.setCgpaCutoff(rs.getFloat(3));
+            jobProfile.setNumberOfRounds(rs.getInt(4));
+            jobProfile.setTypeOfProfile(rs.getString(5));
+            jobProfile.setAcademicSession(rs.getInt(6));
+            jobProfile.setStipend(rs.getInt(7));
+            jobProfile.setPosition(rs.getString(8));
+            jobProfile.setDescription(rs.getString(9));
+            jobProfile.setLocation(rs.getString(10));
+            jobProfile.setDuration(rs.getString(11));
+            System.out.println("Found one!");
+            return jobProfile;
+        }, jobProfileId);
     }
 
     @Override

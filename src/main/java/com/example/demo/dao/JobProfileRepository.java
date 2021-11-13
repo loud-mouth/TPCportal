@@ -11,4 +11,6 @@ public interface JobProfileRepository {
     List<JobProfile> getJobProfilesByCompanyId(int companyId);
 
     List<JobProfile> getJobProfilesAvailableToStudent(Student student);
+
+    JobProfile getJobProfilesByJobProfileId(int jobProfileId);
 }

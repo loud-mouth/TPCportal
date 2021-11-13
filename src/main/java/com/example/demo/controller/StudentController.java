@@ -46,15 +46,6 @@ public class StudentController {
     LoginModule loginmodule;
 
 
-    public boolean logged_in(HttpSession session)
-    {
-        if(session.getAttribute("student") == null && session.getAttribute("company") == null)
-        {
-            return false;
-        }
-        return true;
-    }
-
     @PostMapping("/student/logout")
     public ModelAndView Logoutprocess(HttpSession session)
     {
