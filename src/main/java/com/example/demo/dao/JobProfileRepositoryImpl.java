@@ -22,13 +22,14 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
     private static final String getJobProfilesAvailableToStudent = "SELECT * FROM JobProfile WHERE typeOfProfile=? AND academicSession=? AND cgpaCutoff<=?";
     private static  final String getJobProfilesByJobProfileId = "SELECT * FROM JobProfile WHERE jobProfileId=?";
     private static final String helpMe = "SELECT * FROM JobProfile WHERE companyId=? and position=? and duration=?";
+    private static  final String selectAll = "SELECT * FROM JobProfile";
 
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public JobProfile saveJobProfile(JobProfile jobProfile)
+    public int saveJobProfile(JobProfile jobProfile)
     {
         try
         {
@@ -36,7 +37,7 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
                     jobProfile.getTypeOfProfile(), jobProfile.getAcademicSession(), jobProfile.getStipend(), jobProfile.getPosition(),
                     jobProfile.getDescription(), jobProfile.getLocation(), jobProfile.getDuration());
 
-            return jdbcTemplate.queryForObject(helpMe,(rs,rowNum)->{
+            return ((List<JobProfile>)jdbcTemplate.query(selectAll,(rs,rowNum)->{
                 JobProfile savedCopy = new JobProfile();
                 savedCopy.setJobProfileId(rs.getInt(1));
                 savedCopy.setCompanyId(rs.getInt(2));
@@ -51,14 +52,12 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
                 savedCopy.setDuration(rs.getString(11));
                 System.out.println("Returning and the Job Profile Object that was created!");
                 return savedCopy;
-            }, jobProfile.getCompanyId(), jobProfile.getPosition(), jobProfile.getDescription());
+            })).size();
         }
         catch(DataAccessException e)
         {
             System.out.println(e.getMessage());
-            JobProfile g1 = new JobProfile();
-            g1.setJobProfileId(-1);
-            return g1;
+            return -1;
         }
     }
 

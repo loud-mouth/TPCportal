@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.EligibleBranchesRepository;
 import com.example.demo.dao.JobProfileRepository;
 import com.example.demo.dao.PptRepository;
 import com.example.demo.models.*;
@@ -19,6 +20,7 @@ import com.example.demo.dao.CompanyRepository;
 
 import java.sql.Date;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @Controller
@@ -33,7 +35,11 @@ public class JobProfileController {
     @Autowired
     PptRepository pptrepo;
 
-//    @Autowired
+    @Autowired
+    EligibleBranchesRepository eligiblebranchesrepo;
+
+    private static final String SEARCH_TYPES = "searchTypes";
+
 
 
     @PostMapping("/company/shortlist/{id}")
@@ -66,11 +72,16 @@ public class JobProfileController {
         return mv;
     }
 
-    private static final String SEARCH_TYPES = "searchTypes";
+
+
 
     @ModelAttribute()
     public void initValues(Model model) {
-        model.addAttribute(SEARCH_TYPES, Arrays.asList("cse", "bme"));
+        model.addAttribute(SEARCH_TYPES, Arrays.asList("Chemical Engineering and Technology", "Civil Engineering", "Computer Science and Engineering",
+                "Electrical Engineering", "Electronics Engineering", "Mechanical Engineering", "Metallurgical Engineering",
+                "Mining Engineering", "Pharmaceutical Engineering & Technology", "Industrial Chemistry",
+                "Mathematics and Computing", "Applied Physics", "Biochemical Engineering", "Biomedical Engineering",
+                "Materials Science and Technology"));
     }
 
     @PostMapping("/company/makeJobProfile")
@@ -81,20 +92,41 @@ public class JobProfileController {
             HttpSession session
     )
     {
-        for(String field : tickedBranches)
-        {
-            System.out.println("batman" + field);
-        }
+        HashMap<String, String> branchCode = new HashMap<String, String>();
+        branchCode.put("Chemical Engineering and Technology", "che");
+        branchCode.put("Civil Engineering", "civ");
+        branchCode.put("Computer Science and Engineering", "cse");
+        branchCode.put("Electrical Engineering", "ee");
+        branchCode.put("Electronics Engineering", "ece");
+        branchCode.put("Mechanical Engineering", "mec");
+        branchCode.put("Metallurgical Engineering", "met");
+        branchCode.put("Mining Engineering", "min");
+        branchCode.put("Pharmaceutical Engineering & Technology", "phe");
+        branchCode.put("Industrial Chemistry", "apc");
+        branchCode.put("Mathematics and Computing", "mat");
+        branchCode.put("Applied Physics", "app");
+        branchCode.put("Biochemical Engineering", "bce");
+        branchCode.put("Biomedical Engineering", "bme");
+        branchCode.put("Materials Science and Technology", "mst");
+
+
+
         ModelAndView mv = new ModelAndView();
-        JobProfile savedCopy = jobprofilerepo.saveJobProfile(jobProfile);
-        System.out.println("New Job Profile created with id "+savedCopy.getJobProfileId()+" and position "+savedCopy.getPosition());
-        if(savedCopy.getCompanyId() == -1)
+        int savedCopy = jobprofilerepo.saveJobProfile(jobProfile);
+        System.out.println("New Job Profile created with id "+jobProfile.getJobProfileId()+" and position "+jobProfile.getPosition());
+        if(savedCopy == -1)
         {
             mv.addObject("error", "incorrect details were provided");
             mv.setViewName("makeJobProfile");
             return mv;
         }
-        ppt.setJobProfileId(savedCopy.getJobProfileId());
+        jobProfile.setJobProfileId(savedCopy);
+        for(String field : tickedBranches)
+        {
+            System.out.println("available for field " + field);
+            int savedBranch = eligiblebranchesrepo.saveEligibility(branchCode.get(field), jobProfile);
+        }
+        ppt.setJobProfileId(savedCopy);
         PPT savedPPT = pptrepo.savePPT(ppt);
         if(savedPPT.getJobProfileId() == -1)
         {
@@ -103,7 +135,7 @@ public class JobProfileController {
             return mv;
         }
         mv = loginmodule.redirect("company", session);
-        mv.addObject("message", "Job Profile for " + savedCopy.getPosition() + " has been successfully added!");
+        mv.addObject("message", "Job Profile for " + jobProfile.getPosition() + " has been successfully added!");
         return mv;
     }
 }

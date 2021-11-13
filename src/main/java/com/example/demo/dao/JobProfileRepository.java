@@ -6,7 +6,7 @@ import java.util.List;
 
 
 public interface JobProfileRepository {
-    JobProfile saveJobProfile(JobProfile jobProfile);
+    int saveJobProfile(JobProfile jobProfile);
 
     List<JobProfile> getJobProfilesByCompanyId(int companyId);
 
