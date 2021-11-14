@@ -32,12 +32,10 @@ public class ShortlistController {
         System.out.println(shortlist.getResumeLink());
         System.out.println(shortlist.getJobProfileId());
 
-        System.out.println(id + "HIHIHI");
-
-
         shortlist.setJobProfileId(id);
         ModelAndView mv = new ModelAndView();
         shortlistrepo.saveShortlist(shortlist);
+
         mv = loginmodule.redirect("student", session);
         if(shortlist.getStudentId() == -1)
         {
@@ -49,4 +47,27 @@ public class ShortlistController {
         }
         return mv;
     }
+
+    @PostMapping("/company/changescore")
+    public ModelAndView addResume(
+                                  @ModelAttribute("Shortlist") Shortlist shortlist,
+                                  HttpSession session)
+    {
+
+        System.out.println("Changing score to " + shortlist.getScore());
+        ModelAndView mv = new ModelAndView();
+        shortlistrepo.updateShortlist(shortlist);
+        mv = loginmodule.redirect("company", session);
+        if(shortlist.getStudentId() == -1)
+        {
+            mv.addObject("error", "Error while changing");
+        }
+        else
+        {
+            mv.addObject("message", "Successfully Applied");
+        }
+        return mv;
+    }
+
+
 }

@@ -5,6 +5,40 @@
     <title>Title</title>
 </head>
 <body>
+    <div th:if="${c1 != null}">
+        <div>
+            <form id="change-score-form" class="form" action="/company/changescore" method="post">
+                <h3 class="text-center text-info">Status</h3>
+                <div class="form-group" th:each="entry : ${c1}">
+                    <label for="score" class="text-info" th:text="${entry.student.getName}">Name</label>
+                    <input type="number" name="score" id="score" class="form-control" th:value="${entry.shortlist.getScore}">
+                    <input type="hidden" th:value="${entry.shortlist.jobProfileId}" id="jobProfileId" name="jobProfileId">
+                    <input type="hidden" th:value="${entry.shortlist.studentId}" id="studentId" name="studentId">
+                    <input type="hidden" th:value="${entry.shortlist.roundNumber}" id="roundNumber" name="roundNumber">
+                    <input type="hidden" th:value="${entry.shortlist.resumeLink}" id="resumeLink" name="resumeLink">
+                </div>
+                <div class="form-group">
+                    <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <p>Move to next round?</p>
+        <div>
+            <form class="form" method="post" th:action="@{/company/newCodingRound/{path}(path=${jobProfile.getJobProfileId})}">
+                <input type="submit" name="coding" value="Schedule a Coding Round" />
+            </form>
+        </div>
+        <div>
+            <form class="form" method="post" th:action="@{/company/newInterviewRound/{path}(path=${jobProfile.getJobProfileId})}">
+                <input type="submit" name="interview" value="Schedule an Interview Round" />
+            </form>
+        </div>
+
+    </div>
+
 
 </body>
 </html>

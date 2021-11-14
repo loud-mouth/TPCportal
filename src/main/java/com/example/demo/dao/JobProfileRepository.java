@@ -13,4 +13,6 @@ public interface JobProfileRepository {
     List<JobProfile> getJobProfilesAvailableToStudent(Student student);
 
     JobProfile getJobProfilesByJobProfileId(int jobProfileId);
+
+    void increaseRound(JobProfile jobProfile);
 }

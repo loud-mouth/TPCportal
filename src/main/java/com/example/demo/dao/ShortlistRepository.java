@@ -4,4 +4,6 @@ import com.example.demo.models.Shortlist;
 
 public interface ShortlistRepository {
     Shortlist saveShortlist(Shortlist shortlist);
+
+    Shortlist updateShortlist(Shortlist shortlist);
 }

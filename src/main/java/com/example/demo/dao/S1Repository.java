@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface S1Repository {
     List<S1> getS1(Student student);
+    List<S1> getS2(Student student);
 }

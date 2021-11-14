@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 
+import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
     private static  final String getJobProfilesByJobProfileId = "SELECT * FROM JobProfile WHERE jobProfileId=?";
     private static final String helpMe = "SELECT * FROM JobProfile WHERE companyId=? and position=? and duration=?";
     private static  final String selectAll = "SELECT * FROM JobProfile";
+    private static  final String increaseRound = "UPDATE JobProfile SET numberOfRounds=? WHERE jobProfileId=?";
+
 
 
     @Autowired
@@ -120,6 +123,19 @@ public class JobProfileRepositoryImpl implements  JobProfileRepository
             jobProfile.setDuration(rs.getString(11));
             return jobProfile;
         },  student.getSittingFor(), student.getAcademicSession(), student.getCgpa());
+    }
+
+    @Override
+    public void increaseRound(JobProfile jobProfile)
+    {
+        try{
+            jdbcTemplate.update(increaseRound, jobProfile.getNumberOfRounds()+1, jobProfile.getJobProfileId());
+        }
+        catch(DataAccessException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        return;
     }
 
 

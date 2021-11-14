@@ -29,7 +29,7 @@
 </form>
 
 <body>
-    <div th:if="${!s1.isEmpty()}" >
+    <div th:if="${s1 != null}" >
         <div th:each="job : ${s1}">
             <div>
                 <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
@@ -41,12 +41,25 @@
                 <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${job.jobProfile.getJobProfileId}">
                 <input type="hidden" name="studentId" id="studentId" th:value="${student.getStudentId}">
                 <input type="hidden" name="roundNumber" id="roundNumber" th:value="${job.jobProfile.getNumberOfRounds}">
+                <input type="hidden" name="score" id="score" th:value="0">
                 <div class="form-group">
                     <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
                     <input type="text" name="resumeLink" id="resumeLink" class="form-control">
                 </div>
                 <input type="submit" name="apply" value="Add Resume" />
             </form>
+        </div>
+    </div>
+
+    <div th:if="${s2 != null}" >
+        <p> HELLLOOOOO </p>
+        <div th:each="job : ${s2}">
+            <div>
+                <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
+            </div>
+            <div>
+                <strong><span th:text="${(job.company).getName()}">Name</span></strong>
+            </div>
         </div>
     </div>
 

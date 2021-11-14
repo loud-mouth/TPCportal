@@ -1,11 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.dao.C1Repository;
 import com.example.demo.dao.JobProfileRepository;
 import com.example.demo.dao.S1Repository;
-import com.example.demo.models.Company;
-import com.example.demo.models.JobProfile;
-import com.example.demo.models.S1;
-import com.example.demo.models.Student;
+import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
@@ -28,6 +26,9 @@ public class LoginModule {
     @Autowired
     S1Repository s1repo;
 
+    @Autowired
+    C1Repository c1repo;
+
     public ModelAndView redirect(String key, HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
@@ -37,18 +38,11 @@ public class LoginModule {
             mv.addObject("studentName", student.getName());
             mv.addObject("student", student);
             List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
-            List<S1> temp = s1repo.getS1(student);
-            ArrayList<S1> s1 = new ArrayList<S1> (temp);
-
-            ArrayList<String> s2 = new ArrayList<String>();
-            s2.add("hello");
-
-            for(S1 job : s1)
-            {
-                System.out.println("");
-            }
+            List<S1> s1 = s1repo.getS1(student);
+            List<S1> s2 = s1repo.getS2(student);
 
             mv.addObject("s1", s1);
+            mv.addObject("s2", s2);
             mv.addObject("availablejobs", availablejobs);
             mv.setViewName("dashboard");
         }
