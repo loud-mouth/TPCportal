@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.JobProfileRepository;
+import com.example.demo.dao.S1Repository;
 import com.example.demo.models.Company;
 import com.example.demo.models.JobProfile;
+import com.example.demo.models.S1;
 import com.example.demo.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -22,6 +25,9 @@ public class LoginModule {
     @Autowired(required = true)
     JobProfileRepository jobprofilerepo;
 
+    @Autowired
+    S1Repository s1repo;
+
     public ModelAndView redirect(String key, HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
@@ -31,6 +37,18 @@ public class LoginModule {
             mv.addObject("studentName", student.getName());
             mv.addObject("student", student);
             List<JobProfile> availablejobs = jobprofilerepo.getJobProfilesAvailableToStudent(student);
+            List<S1> temp = s1repo.getS1(student);
+            ArrayList<S1> s1 = new ArrayList<S1> (temp);
+
+            ArrayList<String> s2 = new ArrayList<String>();
+            s2.add("hello");
+
+            for(S1 job : s1)
+            {
+                System.out.println("");
+            }
+
+            mv.addObject("s1", s1);
             mv.addObject("availablejobs", availablejobs);
             mv.setViewName("dashboard");
         }

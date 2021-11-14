@@ -29,18 +29,28 @@
 </form>
 
 <body>
-    <div th:each="job : ${availablejobs}">
-        <strong><span th:text="${job.getPosition()}">Position</span></strong>
-        <form th:if="${job.initialRound}" id="apply-form" class="form" method="post" th:action="@{/student/apply/{path}(path=${job.getJobProfileId})}">
-            <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${job.getJobProfileId}">
-            <input type="hidden" name="studentId" id="studentId" th:value="${student.getStudentId}">
-            <input type="hidden" name="roundNumber" id="roundNumber" value="1">
-            <div class="form-group">
-                <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
-                <input type="text" name="resumeLink" id="resumeLink" class="form-control">
+    <div th:if="${!s1.isEmpty()}" >
+        <div th:each="job : ${s1}">
+            <div>
+                <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
             </div>
-            <input type="submit" name="apply" value="Add Resume" />
-        </form>
+            <div>
+                <strong><span th:text="${(job.company).getName()}">Name</span></strong>
+            </div>
+            <form id="apply-form" class="form" method="post" th:action="@{/student/apply/{path}(path=${job.jobProfile.getJobProfileId})}">
+                <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${job.jobProfile.getJobProfileId}">
+                <input type="hidden" name="studentId" id="studentId" th:value="${student.getStudentId}">
+                <input type="hidden" name="roundNumber" id="roundNumber" th:value="${job.jobProfile.getNumberOfRounds}">
+                <div class="form-group">
+                    <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
+                    <input type="text" name="resumeLink" id="resumeLink" class="form-control">
+                </div>
+                <input type="submit" name="apply" value="Add Resume" />
+            </form>
+        </div>
     </div>
+
+
+
 </body>
 </html>
