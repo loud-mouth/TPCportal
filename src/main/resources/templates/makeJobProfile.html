@@ -6,7 +6,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" type="text/css" href="../static/styles.css" />
 
 </head>
 <body>
@@ -45,9 +45,9 @@
                         <div>
                             <input value="1" name="numberOfRounds" id="numberOfRounds" type="hidden">
                         </div>
-                        <div>
-                            <label for="typeOfProfile">Type of Profile:</label>
-                            <select id="typeOfProfile" name="typeOfProfile">
+                        <div  class="form-group">
+                            <label for="typeOfProfile" class="text-info">Type of Profile:</label>
+                            <select id="typeOfProfile" name="typeOfProfile" class="form-control">
                                 <option value="internship">Internship</option>
                                 <option value="placement">Placement</option>
                             </select>

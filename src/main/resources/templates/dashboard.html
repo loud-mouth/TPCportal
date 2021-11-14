@@ -6,8 +6,7 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="styles.css" />
-
+    <link rel="stylesheet" type="text/css" href="/styles.css" />
 </head>
 <body>
 <div th:if="${error != null}" th:text="${error}">
@@ -24,13 +23,22 @@
     </div>
 </div>
 
-<form action="/student/logout" method="post">
-    <input type="submit" name="logout" value="Logout" />
-</form>
+
+
+
 
 <body>
-    <div th:if="${s1 != null}" >
-        <div th:each="job : ${s1}">
+    <nav class="p-3" style="background: #7b486c">
+        <div class="d-flex align-items-center justify-content-end">
+            <form action="/student/logout" method="post">
+                <button type="submit" name="logout">
+                    Logout
+                </button>
+            </form>
+        </div>
+    </nav>
+    <div th:if="${s1 != null}"  class="container p-3">
+        <div th:each="job : ${s1}" class="card p-3 mb-3">
             <div>
                 <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
             </div>
@@ -46,7 +54,9 @@
                     <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
                     <input type="text" name="resumeLink" id="resumeLink" class="form-control">
                 </div>
-                <input type="submit" name="apply" value="Add Resume" />
+                <button type="submit" name="apply" class="btn btn-warning">
+                    Add Resume
+                </button>
             </form>
         </div>
     </div>
