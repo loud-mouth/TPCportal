@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import com.example.demo.dao.C1Repository;
-import com.example.demo.dao.JobProfileRepository;
-import com.example.demo.dao.S1Repository;
+import com.example.demo.dao.*;
 import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,6 +27,12 @@ public class LoginModule {
     @Autowired
     C1Repository c1repo;
 
+    @Autowired
+    S2Repository s2repo;
+
+    @Autowired
+    S3Repository s3repo;
+
     public ModelAndView redirect(String key, HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
@@ -44,7 +48,17 @@ public class LoginModule {
             mv.addObject("s1", s1);
             mv.addObject("s2", s2);
             mv.addObject("availablejobs", availablejobs);
+
+            List<S2> allActiveCodingTests = s2repo.getActiveCodingTests(student);
+            mv.addObject("allActiveCodingTests", allActiveCodingTests);
+
+            List<S3> allActiveInterviewTests = s3repo.getActiveInterviewTests(student);
+            mv.addObject("allActiveInterviewTests", allActiveInterviewTests);
+
+            System.out.println("Number of Active Coding Tests "+allActiveCodingTests.size());
+
             mv.setViewName("dashboard");
+
         }
         else if(Objects.equals(key, "company"))
         {

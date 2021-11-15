@@ -4,6 +4,8 @@ import com.example.demo.dao.*;
 import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -48,25 +50,13 @@ public class JobProfileController {
     @Autowired
     InterviewerRepository interviewerrepo;
 
+    @Autowired
+    InterviewRepository interviewrepo;
+
     private static final String SEARCH_TYPES = "searchTypes";
 
 
-    @PostMapping("/company/newInterviewRound/{id}")
-    public ModelAndView createInterviewRound(@PathVariable("id") int id, HttpSession session)
-    {
-        System.out.println("Creating new interview round....");
-        ModelAndView mv = new ModelAndView();
-        JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(id);
-        mv.addObject("jobProfile", jobProfile);
-        List<C1> c1 = c1repo.getC1(jobProfile);
-        mv.addObject("c1", c1);
-        Company company = (Company)(session.getAttribute("company"));
-        List<Interviewer> interviewers = interviewerrepo.getAll(company);
-        mv.addObject("interviewers", interviewers);
-        mv.addObject("jobProfile", jobProfile);
-        mv.setViewName("makeInterviewRound");
-        return mv;
-    }
+
 
     @PostMapping("/company/newCodingRound/{id}")
     public ModelAndView createCodingRound(@PathVariable("id") int id, HttpSession session)
@@ -80,40 +70,76 @@ public class JobProfileController {
         return mv;
     }
 
-    @PostMapping("/company/saveInterviewRound")
-    public ModelAndView saveInterviewRound(HttpServletRequest request, HttpSession session)
+    @PostMapping("/company/newInterviewRound/{id}")
+    public ModelAndView createInterviewRound(@PathVariable("id") int id, HttpSession session)
     {
-        System.out.println("saving new interview round....");
+        System.out.println("Creating new interview round....");
+        ModelAndView mv = new ModelAndView();
+        JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(id);
+        List<C1> c1 = c1repo.getC1(jobProfile);
+        mv.addObject("c1", c1);
+        Company company = (Company)(session.getAttribute("company"));
+        List<Interviewer> interviewers = interviewerrepo.getAll(company);
+        mv.addObject("interviewers", interviewers);
+        System.out.println("hellooooo "+jobProfile.getJobProfileId());
+        mv.addObject("jobProfile", jobProfile);
+        mv.setViewName("makeInterviewRound");
+        return mv;
+    }
+
+    @PostMapping("/company/saveInterviewRound/{id}")
+    public ModelAndView saveInterviewRound(@PathVariable("id") int id, @RequestParam("target") int target, HttpServletRequest request, HttpSession session)
+    {
+
+        System.out.println(target + " saving new interview round....");
         ModelAndView mv = new ModelAndView();
         mv = loginmodule.redirect("company", session);
-//        List<C1> c1 = c1repo.getC1(jobProfile); //current shortlist
-//        //student whose marks are >= will be inserted into new shortlist entry
-//        System.out.println("DEATH....");
-//        jobprofilerepo.increaseRound(jobProfile);
-//        session.setAttribute(jobprofilerepo.getJobProfilesByJobProfileId(jobProfile.getJobProfileId()));
-//        int saved = codingtestrepo.saveCodingTest(codingTest);
-//        if(saved == -1)
-//        {
-//            mv.addObject("error", "Round Could Not Be Scheduled");
-//        }
-//        else
-//        {
-//            mv.addObject("message", "Round Scheduled Successfully");
-//            for(C1 entry : c1)
-//            {
-//                if(entry.getShortlist().getScore() >= target)
-//                {
-//                    Shortlist shortlist = new Shortlist();
-//                    shortlist.setJobProfileId(entry.getShortlist().getJobProfileId());
-//                    shortlist.setRoundNumber(entry.getShortlist().getRoundNumber()+1);
-//                    shortlist.setStudentId(entry.getShortlist().getStudentId());
-//                    shortlist.setResumeLink(entry.getShortlist().getResumeLink());
-//                    shortlist.setScore(0);
-//                    shortlistrepo.saveShortlist(shortlist);
-//                }
-//            }
-//            System.out.println("Successfully updated shortlists");
-//        }
+        int jobProfileId = id;
+//        int target = Integer.parseInt((String) request.getAttribute("target"));
+
+        JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(jobProfileId);
+        List<C1> c1 = c1repo.getC1(jobProfile); //current shortlist
+
+        jobprofilerepo.increaseRound(jobProfile);
+
+
+
+        for(C1 entry : c1)
+        {
+            if(entry.getShortlist().getScore() >= target)
+            {
+                Interview interview = new Interview();
+                interview.setJobProfileId(entry.getShortlist().getJobProfileId());
+                interview.setStudentId(entry.getStudent().getStudentId());
+                interview.setRoundNumber(entry.getShortlist().getRoundNumber()+1);
+
+                String str =   entry.getShortlist().getStudentId() + "--" + entry.getShortlist().getRoundNumber() + "--" + entry.getShortlist().getJobProfileId();
+
+                String meetingLink = (String)(request.getParameter("meetingLink"+str));
+                String startDateTime = (String) (request.getParameter("startDateTime"+str));
+                String endDateTime = (String) (request.getParameter("endDateTime"+str));
+                int interviewerId = Integer.parseInt((String) request.getParameter("interviewerId"+str));
+
+                System.out.println(meetingLink + startDateTime + endDateTime + interviewerId + "HOLA");
+
+                interview.setMeetingLink(meetingLink);
+                interview.setStartDateTime(startDateTime);
+                interview.setEndDateTime(endDateTime);
+                interview.setInterviewerId(interviewerId);
+
+                interviewrepo.saveInterview(interview);
+
+                Shortlist shortlist = new Shortlist();
+                shortlist.setJobProfileId(entry.getShortlist().getJobProfileId());
+                shortlist.setRoundNumber(entry.getShortlist().getRoundNumber()+1);
+                shortlist.setStudentId(entry.getShortlist().getStudentId());
+                shortlist.setResumeLink(entry.getShortlist().getResumeLink());
+                shortlist.setScore(0);
+                shortlistrepo.saveShortlist(shortlist);
+
+
+            }
+        }
 
         return mv;
     }
@@ -131,6 +157,8 @@ public class JobProfileController {
         jobprofilerepo.increaseRound(jobProfile);
 //        session.setAttribute(jobprofilerepo.getJobProfilesByJobProfileId(jobProfile.getJobProfileId()));
 
+        int temp = codingTest.getRoundNumber()+1;
+        codingTest.setRoundNumber(temp);
         int saved = codingtestrepo.saveCodingTest(codingTest);
         if(saved == -1)
         {

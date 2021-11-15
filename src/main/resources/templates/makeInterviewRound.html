@@ -54,11 +54,15 @@
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12 ">
 
-                        <form id="make-coding-round-form" class="form-group" action="/company/saveInterviewRound" method="post">
+                        <form id="make-coding-round-form" class="form-group" th:action="@{/company/saveInterviewRound/{path}(path=${jobProfile.getJobProfileId})}" method="post">
                             <h3 class="text-center text-info">New Interview Round</h3>
-                            <input type="hidden" id="jobProfileId" name="jobProfileId" value="${jobProfile.getJobProfileId}">
+                            <div class="form-group">
+                                <label for="target" class="text-info">Target for Qualifiers:</label><br>
+                                <input type="number" name="target" id="target" class="form-control">
+                                <input type="hidden" name="jobProfileId" id="jobProfileId" value="${jobProfile.getJobProfileId}}">
+                            </div>
                             <div th:each="entry : ${c1}" class="col-md-12">
-                                <span th:text="'For student' + ${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} "></span>
+                                <span th:text="'For student ' + ${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} "></span>
                                 <label th:for="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">Interview Meeting Link</label>
                                 <input type="text" th:id="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
 
@@ -70,10 +74,16 @@
 
                                 <label th:for="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">Choose an interviewer:</label>
                                 <select th:id="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
-                                    <option th:each="interviewer : ${interviewers}" th:value="${interviewer.getInterviewerId}" th:text="${interviewer.getName}">
-                                        NAMEOFINTERVIEWER
-                                    </option>
+                                    <div th:each="interviewer : ${interviewers}">
+
+                                        <option th:value="${interviewer.getInterviewerId}" th:text="${interviewer.getName} + ' !!! ' + ${interviewer.getInterviewerId}">
+                                            NAMEOFINTERVIEWER
+                                        </option>
+
+                                    </div>
+
                                 </select>
+                                </input>
 
                             </div>
                             <input type="submit" name="submit" class="btn btn-info btn-md" value="Set these interviews">

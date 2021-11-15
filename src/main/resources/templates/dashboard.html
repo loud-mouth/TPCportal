@@ -115,6 +115,143 @@
             </div>
         </div>
     </div>
+    <-- ////////////////////////////////////////////////////// -->
+    <div th:if="${s2 != null}"  class="container p-3 mt-auto" style="box-shadow: #17A2B8; overflow: scroll; overflow-scrolling: initial; height: 500px;">
+        <div th:each="job : ${s2}" class="card p-3 mb-3">
+
+            <div class="card">
+                <i><div class="card-header"  th:text="'Round ' + ${job.getJobProfile.getNumberOfRounds} + ': ' + ${job.jobProfile.getPosition} + ' @ ' + ${job.company.getName}">Featured</div></i>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 card-text">
+                            <span th:text="'Location : ' + ${job.jobProfile.getLocation}">
+                                Location
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Description : ' + ${job.jobProfile.getDescription}">
+                                Description
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Stipend (per Month) : ' + ${job.jobProfile.getStipend}">
+                                Stipend (per Month)
+                            </span>
+                        </div>
+                        <div th:if="${job.jobProfile.getTypeOfProfile} == 'internship'" class="col-6 card-text">
+                            <span th:text="'Duration (in Months) : ' + ${job.jobProfile.getDuration}">
+                                Duration
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <-- ////////////////////////////////////////////////////// -->
+
+    <div th:if="${allActiveCodingTests != null}"  class="container p-3 mt-auto" style="box-shadow: #17A2B8; overflow: scroll; overflow-scrolling: initial; height: 500px;">
+        <div th:each="job : ${allActiveCodingTests}" class="card p-3 mb-3">
+
+            <div class="card">
+                <i><div class="card-header"  th:text="'Round ' + ${job.getJobProfile.getNumberOfRounds} + ': ' + ${job.jobProfile.getPosition} + ' @ ' + ${job.company.getName}">Featured</div></i>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 card-text">
+                            <span th:text="'Location : ' + ${job.jobProfile.getLocation}">
+                                Location
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Description : ' + ${job.jobProfile.getDescription}">
+                                Description
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Stipend (per Month) : ' + ${job.jobProfile.getStipend}">
+                                Stipend (per Month)
+                            </span>
+                        </div>
+                        <div th:if="${job.jobProfile.getTypeOfProfile} == 'internship'" class="col-6 card-text">
+                            <span th:text="'Duration (in Months) : ' + ${job.jobProfile.getDuration}">
+                                Duration
+                            </span>
+                        </div>
+
+                        <div class="col-6 card-text">
+                            <span th:text="'Coding Test : ' + ${job.getCodingTest.getTestLink} + ' on Platform ' +  ${job.getCodingTest.getPlatform}">
+                                TEST_LINK
+                            </span>
+                        </div>
+
+                        <div class="col-6 card-text">
+                            <span th:text="'Date and Time : ' +  ${job.getCodingTest.getTestDateTime}">
+                                TEST_LINK
+                            </span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <-- ////////////////////////////////////////////////////// -->
+
+    <div th:if="${allActiveInterviewTests != null}"  class="container p-3 mt-auto" style="box-shadow: #17A2B8; overflow: scroll; overflow-scrolling: initial; height: 500px;">
+        <div th:each="job : ${allActiveInterviewTests}" class="card p-3 mb-3">
+
+            <div class="card">
+                <i><div class="card-header"  th:text="'Round ' + ${job.getJobProfile.getNumberOfRounds} + ': ' + ${job.jobProfile.getPosition} + ' @ ' + ${job.company.getName}">Featured</div></i>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 card-text">
+                            <span th:text="'Location : ' + ${job.jobProfile.getLocation}">
+                                Location
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Description : ' + ${job.jobProfile.getDescription}">
+                                Description
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Stipend (per Month) : ' + ${job.jobProfile.getStipend}">
+                                Stipend (per Month)
+                            </span>
+                        </div>
+                        <div th:if="${job.jobProfile.getTypeOfProfile} == 'internship'" class="col-6 card-text">
+                            <span th:text="'Duration (in Months) : ' + ${job.jobProfile.getDuration}">
+                                Duration
+                            </span>
+                        </div>
+
+                        <div class="col-6 card-text">
+                            <span th:text="'Interview Test : ' + ${job.getInterview.getMeetingLink}">
+                                TEST_LINK
+                            </span>
+                        </div>
+
+                        <div class="col-6 card-text">
+                            <span th:text="'Date and Time : ' + ${job.getInterview.getStartDateTime} + ' on Platform ' +  ${job.getInterview.getStartDateTime}">
+                                TEST_LINK
+                            </span>
+                        </div>
+
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <-- ////////////////////////////////////////////////////// -->
+
 </div>
 <!-- Footer -->
 <footer class="bg-dark text-center text-white" style="height: 20%">

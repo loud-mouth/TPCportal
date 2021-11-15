@@ -1,10 +1,10 @@
 package com.example.demo.models;
 
-public class S2 {
+public class S3 {
     private JobProfile jobProfile;
     private Company company;
     private Shortlist shortlist;
-    private  CodingTest codingTest;
+    private  Interview interview;
 
     public JobProfile getJobProfile() {
         return jobProfile;
@@ -30,11 +30,11 @@ public class S2 {
         this.shortlist = shortlist;
     }
 
-    public CodingTest getCodingTest() {
-        return codingTest;
+    public Interview getInterview() {
+        return interview;
     }
 
-    public void setCodingTest(CodingTest codingTest) {
-        this.codingTest = codingTest;
+    public void setInterview(Interview interview) {
+        this.interview = interview;
     }
 }

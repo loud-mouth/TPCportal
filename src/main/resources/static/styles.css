@@ -37,3 +37,9 @@ button {
 button:hover {
     transform: translateY(-5px);
 }
+
+.marginAutoLR
+{
+    margin-right:auto;
+    margin-left:auto;
+}

@@ -53,9 +53,28 @@
                             <h3 class="text-center text-white pt-5">Sign In</h3>
                         </div>
                         <div class="container">
+                            <div class="marginAutoLR">
+                                <div th:if="${error != null}">
+                                    <div>
+                                        <div class="text-center" style="color:red">
+                                            <p th:text="${error}">hello</p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div th:if="${message != null}">
+                                    <div>
+                                        <div class="text-center" style="color:red">
+                                            <p th:text="${message}">hello</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div id="login-row" class="row justify-content-center align-items-center">
+
                                 <div id="login-column1" class="col-md-6">
                                     <div id="login-box1" class="col-md-12">
+
                                         <form id="login-form1" class="form" action="/student/login" method="post">
                                             <h3 class="text-center text-info">Student Login</h3>
                                             <div class="form-group">
@@ -70,23 +89,7 @@
                                                 <label for="remember-me" class="text-info"><span>Remember me</span> <span><input  id="remember-me" name="remember-me" type="checkbox"></span></label><br>
                                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="Enter">
                                             </div>
-                                            <div>
-                                                <div th:if="${error != null}">
-                                                    <div>
-                                                         <div class="text-left" style="color:red">
-                                                             <p th:text="${error}">hello</p>
-                                                         </div>
-                                                    </div>
-                                                </div>
 
-                                                <div th:if="${message != null}">
-                                                    <div>
-                                                        <div class="text-left" style="color:red">
-                                                            <p th:text="${message}">hello</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div id="register-link" class="text-right">
                                                 <a href="/student/register" class="text-info">Register here</a>
                                             </div>
