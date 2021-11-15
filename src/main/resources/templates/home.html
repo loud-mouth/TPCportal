@@ -1,6 +1,7 @@
 <!doctype html>
 <html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
+    <title>TPC Portal</title>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -9,77 +10,209 @@
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="../static/styles.css" />
+    <link rel="stylesheet" type="text/css" href="styles.css" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        #intro {
+            background-image: url(https://mdbootstrap.com/img/new/fluid/city/008.jpg);
+            height: 100vh;
+        }
+
+        /* Height for devices larger than 576px */
+        @media (min-width: 992px) {
+            #intro {
+                margin-top: -58.59px;
+            }
+        }
+
+        .navbar .nav-link {
+            color: #fff !important;
+        }
+    </style>
 </head>
 
-<body>
+<body style="height: 100%; display: flex; flex-direction: column;">
+<header>
 
-<div th:if="${error != null}" th:text="${error}">
-    <div class="alert alert-warning alert-dismissible" role="alert">
-			<span type="button" class="close" data-dismiss="alert"
-                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
-    </div>
-</div>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark" style="background-color: ${rolecolor}!important;">
+        <div class="container-fluid">
+            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        </div>
+    </nav>
 
-<div th:if="${message != null}" th:text="${message}">
-    <div class="alert alert-warning alert-dismissible" role="alert">
-			<span type="button" class="close" data-dismiss="alert"
-                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
-    </div>
-</div>
+</header>
+<div id="intro" class="bg-image shadow-2-strong">
+    <div class="mask d-flex align-items-center h-100" style="background-color: rgba(0, 0, 0, 0.8);">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-sm-5 col-xl-8">
+                    <div id="login" class="bg">
+                        <div class="">
+                            <h3 class="text-center text-white pt-5">Sign In</h3>
+                        </div>
+                        <div class="container">
+                            <div id="login-row" class="row justify-content-center align-items-center">
+                                <div id="login-column1" class="col-md-6">
+                                    <div id="login-box1" class="col-md-12">
+                                        <form id="login-form1" class="form" action="/student/login" method="post">
+                                            <h3 class="text-center text-info">Student Login</h3>
+                                            <div class="form-group">
+                                                <label for="username" class="text-info">Student Id:</label><br>
+                                                <input required type="text" name="username" id="username" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password" class="text-info">Password:</label><br>
+                                                <input required type="password" name="password" id="password" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="remember-me" class="text-info"><span>Remember me</span> <span><input  id="remember-me" name="remember-me" type="checkbox"></span></label><br>
+                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Enter">
+                                            </div>
+                                            <div>
+                                                <div th:if="${error != null}">
+                                                    <div>
+                                                         <div class="text-left" style="color:red">
+                                                             <p th:text="${error}">hello</p>
+                                                         </div>
+                                                    </div>
+                                                </div>
 
-
-<div id="login">
-    <h3 class="text-center text-white pt-5">Login form</h3>
-    <div class="container">
-        <div id="login-row" class="row justify-content-center align-items-center">
-            <div id="login-column" class="col-md-6">
-                <div id="login-box" class="col-md-12">
-                    <form id="login-form" class="form" action="/student/login" method="post">
-                        <h3 class="text-center text-info">Student Login</h3>
-                        <div class="form-group">
-                            <label for="username" class="text-info">StudentId:</label><br>
-                            <input type="text" name="username" id="username" class="form-control">
+                                                <div th:if="${message != null}">
+                                                    <div>
+                                                        <div class="text-left" style="color:red">
+                                                            <p th:text="${message}">hello</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="register-link" class="text-right">
+                                                <a href="/student/register" class="text-info">Register here</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                                <div id="login-column2" class="col-md-6">
+                                    <div id="login-box2" class="col-md-12">
+                                        <form id="login-form2" class="form" action="/company/login" method="post">
+                                            <h3 class="text-center text-info">Company Login</h3>
+                                            <div class="form-group">
+                                                <label for="username" class="text-info">Email Id:</label><br>
+                                                <input required type="text" name="username" id="username2" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="password" class="text-info">Password:</label><br>
+                                                <input required type="password" name="password" id="password2" class="form-control">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me2" name="remember-me" type="checkbox"></span></label><br>
+                                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Enter">
+                                            </div>
+                                            <div id="register-link2" class="text-right">
+                                                <a href="/company/register" class="text-info">Register here</a>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="password" class="text-info">Password:</label><br>
-                            <input type="password" name="password" id="password" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me" name="remember-me" type="checkbox"></span></label><br>
-                            <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
-                        </div>
-                        <div id="register-link" class="text-right">
-                            <a href="/student/register" class="text-info">Register here</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <div id="login-column2" class="col-md-6">
-                <div id="login-box2" class="col-md-12">
-                    <form id="login-form2" class="form" action="/company/login" method="post">
-                        <h3 class="text-center text-info">Company Login</h3>
-                        <div class="form-group">
-                            <label for="username" class="text-info">Email Id:</label><br>
-                            <input type="text" name="username" id="username2" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="text-info">Password:</label><br>
-                            <input type="password" name="password" id="password2" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="remember-me" class="text-info"><span>Remember me</span> <span><input id="remember-me2" name="remember-me" type="checkbox"></span></label><br>
-                            <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
-                        </div>
-                        <div id="register-link2" class="text-right">
-                            <a href="/company/register" class="text-info">Register here</a>
-                        </div>
-                    </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<!-- Background image -->
+
+<!--<div style="flex: 1;"></div>-->
+<!--<hr class="featurette-divider" style="margin-bottom: 0;">-->
+
+<!-- FOOTER -->
+<!-- Footer -->
+<footer class="bg-dark text-center text-white" style="height: 20%">
+    <!-- Grid container -->
+    <div class="container p-2">
+        <!-- Section: Social media -->
+        <section class="mb-2">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/tpc.iitbhu/" role="button"
+            ><i class="fa fa-facebook-f"></i
+            ></a>
+
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/IITBHU_Varanasi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" role="button"
+            ><i class="fa fa-twitter"></i
+            ></a>
+
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://iitbhu.ac.in/" role="button"
+            ><i class="fa fa-google"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/iitbhu.varanasi/?hl=en" role="button"
+            ><i class="fa fa-instagram"></i
+            ></a>
+
+        </section>
+        <!-- Section: Social media -->
+
+        <!-- Section: Form -->
+        <section class="">
+            <form action="/addEmail" method="post">
+                <!--Grid row-->
+                <div class="row d-flex justify-content-center">
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <p class="pt-2">
+                            <strong>Sign up for our Daily updates!</strong>
+                        </p>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-5 col-12">
+                        <!-- Email  -->
+                        <div class="form-outline form-white mb-4">
+                            <input required type="text" id="form5Example21" class="form-control" placeholder="Email Address"/>
+<!--                            <label class="form-label" for="form5Example21">Email address</label>-->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-outline-light mb-4">
+                            Subscribe
+                        </button>
+                    </div>
+                    <!--Grid column-->
+                </div>
+                <!--Grid row-->
+            </form>
+        </section>
+        <!-- Section: Form -->
+
+        <!-- Section: Text -->
+        <section class="mb-4">
+            <p>
+                Training and Placement Cell, Indian Institute of Technology, Varanasi (BHU).
+            </p>
+        </section>
+        <!-- Section: Text -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://www.linkedin.com/in/anant-saxena-299170199/">Anant Saxena</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
+
 </body>
 </html>

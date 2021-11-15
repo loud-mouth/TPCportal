@@ -1,44 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:c="http://www.w3.org/1999/XSL/Transform">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        #intro {
+            background-image: url(https://mdbootstrap.com/img/new/fluid/city/008.jpg);
+            height: 80px;
+        }
+
+        /* Height for devices larger than 576px */
+        @media (min-width: 992px) {
+            #intro {
+                margin-top: -58.59px;
+            }
+        }
+
+        .navbar .nav-link {
+            color: #fff !important;
+        }
+    </style>
+
+
 </head>
 <body>
-    <div th:if="${c1 != null}">
-        <div>
-            <form id="change-score-form" class="form" action="/company/changescore" method="post">
-                <h3 class="text-center text-info">Status</h3>
-                <div class="form-group" th:each="entry : ${c1}">
-                    <label for="score" class="text-info" th:text="${entry.student.getName}">Name</label>
-                    <input type="number" name="score" id="score" class="form-control" th:value="${entry.shortlist.getScore}">
-                    <input type="hidden" th:value="${entry.shortlist.jobProfileId}" id="jobProfileId" name="jobProfileId">
-                    <input type="hidden" th:value="${entry.shortlist.studentId}" id="studentId" name="studentId">
-                    <input type="hidden" th:value="${entry.shortlist.roundNumber}" id="roundNumber" name="roundNumber">
-                    <input type="hidden" th:value="${entry.shortlist.resumeLink}" id="resumeLink" name="resumeLink">
-                </div>
-                <div class="form-group">
-                    <input type="submit" name="submit" class="btn btn-info btn-md" value="submit">
-                </div>
+<header style="height: 10%;">
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        </div>
+        <div class="d-flex align-items-center justify-content-end">
+            <form action="/company/logout" method="post">
+                <button type="submit" name="logout">
+                    Logout
+                </button>
             </form>
+        </div>
+    </nav>
+
+</header>
+
+
+<div id="login" class="container mt-5">
+    <div class="container p-3">
+        <div th:if="${c1 != null}">
+            <div th:if="${!c1.isEmpty}">
+                <form id="change-score-form" class="form" action="/company/changescore" method="post">
+                    <h3 class="text-center text-info">Status</h3>
+                    <div style="overflow: scroll; overflow-scrolling: initial; max-height: 500px; overflow-x: hidden">
+                        <div class="form-group d-flex row" th:each="entry : ${c1}">
+                            <label th:for="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info" th:text="${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} ">Name</label>
+                            <input type="number" th:name="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:id="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control" th:value="${entry.getShortlist.getScore}">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" name="submit" class="btn btn-info btn-md" value="Change Scores">
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-5 border border-dark p-2" style="width: fit-content;">
+            <i><h5>Move to next round?</h5></i>
+            <div class="row d-flex ml-3">
+                <div class="mr-3">
+                    <form class="form-group" method="post" th:action="@{/company/newCodingRound/{path}(path=${jobProfile.getJobProfileId})}">
+                        <input class="btn btn-secondary" type="submit" name="coding" value="Schedule a Coding Round" />
+                    </form>
+                </div>
+                <div class="mr-3">
+                    <form class="form-group" method="post" th:action="@{/company/newInterviewRound/{path}(path=${jobProfile.getJobProfileId})}">
+                        <input class="btn btn-secondary" type="submit" name="interview" value="Schedule an Interview Round" />
+                    </form>
+                </div>
+            </div>
+
+
         </div>
     </div>
+</div>
 
-    <div>
-        <p>Move to next round?</p>
-        <div>
-            <form class="form" method="post" th:action="@{/company/newCodingRound/{path}(path=${jobProfile.getJobProfileId})}">
-                <input type="submit" name="coding" value="Schedule a Coding Round" />
-            </form>
-        </div>
-        <div>
-            <form class="form" method="post" th:action="@{/company/newInterviewRound/{path}(path=${jobProfile.getJobProfileId})}">
-                <input type="submit" name="interview" value="Schedule an Interview Round" />
-            </form>
-        </div>
+<!-- Footer -->
+<footer class="bg-dark text-center text-white fixed-bottom page-footer">
+    <!-- Grid container -->
+    <div class="container p-2">
+        <!-- Section: Social media -->
+        <section class="mb-2">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/tpc.iitbhu/" role="button"
+            ><i class="fa fa-facebook-f"></i
+            ></a>
 
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/IITBHU_Varanasi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" role="button"
+            ><i class="fa fa-twitter"></i
+            ></a>
+
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://iitbhu.ac.in/" role="button"
+            ><i class="fa fa-google"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/iitbhu.varanasi/?hl=en" role="button"
+            ><i class="fa fa-instagram"></i
+            ></a>
+
+        </section>
+        <!-- Section: Social media -->
+
+        <!-- Section: Form -->
+        <section class="">
+            <form action="/addEmail" method="post">
+                <!--Grid row-->
+                <div class="row d-flex justify-content-center">
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <p class="pt-2">
+                            <strong>Sign up for our Daily updates!</strong>
+                        </p>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-5 col-12">
+                        <!-- Email  -->
+                        <div class="form-outline form-white mb-4">
+                            <input required type="text" id="form5Example21" class="form-control" placeholder="Email Address"/>
+                            <!--                            <label class="form-label" for="form5Example21">Email address</label>-->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-outline-light mb-4">
+                            Subscribe
+                        </button>
+                    </div>
+                    <!--Grid column-->
+                </div>
+                <!--Grid row-->
+            </form>
+        </section>
+        <!-- Section: Form -->
+
+        <!-- Section: Text -->
+        <section class="mb-4">
+            <p>
+                Training and Placement Cell, Indian Institute of Technology, Varanasi (BHU).
+            </p>
+        </section>
+        <!-- Section: Text -->
     </div>
+    <!-- Grid container -->
 
-
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://www.linkedin.com/in/anant-saxena-299170199/">Anant Saxena</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
 </body>
 </html>

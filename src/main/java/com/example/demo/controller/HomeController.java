@@ -1,11 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.dao.JobProfileRepository;
+import com.example.demo.dao.newsletterRepository;
 import com.example.demo.models.Company;
 import com.example.demo.models.JobProfile;
 import com.example.demo.models.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +25,19 @@ public class HomeController {
     @Autowired
     LoginModule loginmodule;
 
-    @RequestMapping(value = "home", method = RequestMethod.GET)
+    @Autowired
+    newsletterRepository newsletterrepo;
+
+    @PostMapping("/addEmail")
+    public ModelAndView addEmail(String emailId, HttpSession session)
+    {
+        ModelAndView mv =loginmodule.redirect("home", session);
+        newsletterrepo.addEmailId(emailId);
+        return mv;
+    }
+
+
+    @RequestMapping(value = {"/home", "/"}, method = RequestMethod.GET)
     public ModelAndView home(HttpSession session)
     {
         ModelAndView mv = loginmodule.confirm_login_as(session, "notLoggedIn");

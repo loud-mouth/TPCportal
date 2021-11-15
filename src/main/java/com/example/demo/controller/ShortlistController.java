@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -50,22 +51,28 @@ public class ShortlistController {
 
     @PostMapping("/company/changescore")
     public ModelAndView addResume(
-                                  @ModelAttribute("Shortlist") Shortlist shortlist,
+                                  HttpServletRequest request,
                                   HttpSession session)
     {
 
-        System.out.println("Changing score to " + shortlist.getScore());
+        List<C1> c1 = (List<C1>)session.getAttribute("intoTheForm");
+        session.removeAttribute("intoTheForm");
+//        System.out.println("Changing score to " + shortlist.getScore());
         ModelAndView mv = new ModelAndView();
-        shortlistrepo.updateShortlist(shortlist);
+//
+
+        for(C1 entry : c1) {
+            Shortlist shortlist = entry.getShortlist();
+            String str = "score" + entry.getShortlist().getStudentId() + "--" + entry.getShortlist().getRoundNumber() + "--" + entry.getShortlist().getJobProfileId();
+            shortlist.setScore(Integer.parseInt(request.getParameter(str)));
+            shortlistrepo.updateShortlist(shortlist);
+            if (shortlist.getStudentId() == -1) {
+                System.out.println("COULD NOT SAVE SHORTLIST");
+            }
+        }
+
         mv = loginmodule.redirect("company", session);
-        if(shortlist.getStudentId() == -1)
-        {
-            mv.addObject("error", "Error while changing");
-        }
-        else
-        {
-            mv.addObject("message", "Successfully Applied");
-        }
+
         return mv;
     }
 

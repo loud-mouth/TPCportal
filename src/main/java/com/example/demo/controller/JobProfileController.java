@@ -166,6 +166,7 @@ public class JobProfileController {
         mv.addObject("jobProfile", jobProfile);
         List<C1> c1 = c1repo.getC1(jobProfile);
         mv.addObject("c1", c1);
+        session.setAttribute("intoTheForm", c1);
         if(c1 != null)
         {
             System.out.println("Students found = " + c1.size());

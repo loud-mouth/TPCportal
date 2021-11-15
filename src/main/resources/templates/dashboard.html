@@ -4,76 +4,201 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="/styles.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
-<body>
-<div th:if="${error != null}" th:text="${error}">
-    <div class="alert alert-warning alert-dismissible" role="alert">
-			<span type="button" class="close" data-dismiss="alert"
-                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${error}">hello</strong>
+<body style="height: 100%; display: flex; flex-direction: column;">
+
+<div style="width: 100%;">
+    <header style="height: 10%;">
+        <style>
+            #intro {
+                background-image: url(https://mdbootstrap.com/img/new/fluid/city/008.jpg);
+                height: 50px;
+            }
+
+            /* Height for devices larger than 576px */
+            @media (min-width: 992px) {
+                #intro {
+                    margin-top: -58.59px;
+                }
+            }
+
+            .navbar .nav-link {
+                color: #fff !important;
+            }
+        </style>
+        <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+            <div class="container-fluid">
+                <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+            </div>
+            <div class="d-flex align-items-center justify-content-end">
+                <form action="/student/logout" method="post">
+                    <button type="submit" name="logout">
+                        Logout
+                    </button>
+                </form>
+            </div>
+        </nav>
+
+    </header>
+
+</div>
+
+<div id="intro" class="mt-auto  bg-image shadow-2-strong" >
+    <div>
+        <h3 class="text-center text-black pt-5">Opportunities</h3>
     </div>
 </div>
 
-<div th:if="${message != null}" th:text="${message}">
-    <div class="alert alert-warning alert-dismissible" role="alert">
-			<span type="button" class="close" data-dismiss="alert"
-                  aria-label="Close"><span aria-hidden="true">&times;</span></span> <strong th:text="${message}">hello</strong>
+
+
+<div id="login" class="form-control">
+    <div th:if="${error != null}" lass="mt-auto text-red">
+            <div class="text-left" style="color:red">
+                <p th:text="${error}">hello</p>
+            </div>
     </div>
-</div>
 
-
-
-
-
-<body>
-    <nav class="p-3" style="background: #7b486c">
-        <div class="d-flex align-items-center justify-content-end">
-            <form action="/student/logout" method="post">
-                <button type="submit" name="logout">
-                    Logout
-                </button>
-            </form>
+    <div th:if="${message != null}" lass="mt-auto text-red">
+        <div class="text-left" style="color:red">
+            <p th:text="${message}">hello</p>
         </div>
-    </nav>
-    <div th:if="${s1 != null}"  class="container p-3">
+    </div>
+
+
+    <div th:if="${s1 != null}"  class="container p-3 mt-auto" style="box-shadow: #17A2B8; overflow: scroll; overflow-scrolling: initial; height: 500px;">
         <div th:each="job : ${s1}" class="card p-3 mb-3">
-            <div>
-                <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
-            </div>
-            <div>
-                <strong><span th:text="${(job.company).getName()}">Name</span></strong>
-            </div>
-            <form id="apply-form" class="form" method="post" th:action="@{/student/apply/{path}(path=${job.jobProfile.getJobProfileId})}">
-                <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${job.jobProfile.getJobProfileId}">
-                <input type="hidden" name="studentId" id="studentId" th:value="${student.getStudentId}">
-                <input type="hidden" name="roundNumber" id="roundNumber" th:value="${job.jobProfile.getNumberOfRounds}">
-                <input type="hidden" name="score" id="score" th:value="0">
-                <div class="form-group">
-                    <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
-                    <input type="text" name="resumeLink" id="resumeLink" class="form-control">
+
+            <div class="card">
+                <i><div class="card-header"  th:text="${job.jobProfile.getPosition} + ' @ ' + ${job.company.getName}"}>Featured</div></i>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6 card-text">
+                            <span th:text="'Location : ' + ${job.jobProfile.getLocation}">
+                                Location
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Description : ' + ${job.jobProfile.getDescription}">
+                                Description
+                            </span>
+                        </div>
+                        <div class="col-6 card-text">
+                            <span th:text="'Stipend (per Month) : ' + ${job.jobProfile.getStipend}">
+                                Stipend (per Month)
+                            </span>
+                        </div>
+                        <div th:if="${job.jobProfile.getTypeOfProfile} == 'internship'" class="col-6 card-text">
+                            <span th:text="'Duration (in Months) : ' + ${job.jobProfile.getDuration}">
+                                Duration
+                            </span>
+                        </div>
+                    </div>
+
+                    <form id="apply-form" class="form-group mt-2" method="post" th:action="@{/student/apply/{path}(path=${job.jobProfile.getJobProfileId})}">
+                        <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${job.jobProfile.getJobProfileId}">
+                        <input type="hidden" name="studentId" id="studentId" th:value="${student.getStudentId}">
+                        <input type="hidden" name="roundNumber" id="roundNumber" th:value="${job.jobProfile.getNumberOfRounds}">
+                        <input type="hidden" name="score" id="score" th:value="0">
+                        <div class="form-group">
+                            <label for="resumeLink" class="text-info">Enter Resume Link:</label><br>
+                            <input type="text" name="resumeLink" id="resumeLink" class="form-control">
+                        </div>
+                        <button type="submit" name="apply" class="btn btn-success">
+                            Add Resume
+                        </button>
+                    </form>
                 </div>
-                <button type="submit" name="apply" class="btn btn-warning">
-                    Add Resume
-                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Footer -->
+<footer class="bg-dark text-center text-white" style="height: 20%">
+    <!-- Grid container -->
+    <div class="container p-2">
+        <!-- Section: Social media -->
+        <section class="mb-2">
+            <!-- Facebook -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.facebook.com/tpc.iitbhu/" role="button"
+            ><i class="fa fa-facebook-f"></i
+            ></a>
+
+            <!-- Twitter -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://twitter.com/IITBHU_Varanasi?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor" role="button"
+            ><i class="fa fa-twitter"></i
+            ></a>
+
+            <!-- Google -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://iitbhu.ac.in/" role="button"
+            ><i class="fa fa-google"></i
+            ></a>
+
+            <!-- Instagram -->
+            <a class="btn btn-outline-light btn-floating m-1" href="https://www.instagram.com/iitbhu.varanasi/?hl=en" role="button"
+            ><i class="fa fa-instagram"></i
+            ></a>
+
+        </section>
+        <!-- Section: Social media -->
+
+        <!-- Section: Form -->
+        <section class="">
+            <form action="/addEmail" method="post">
+                <!--Grid row-->
+                <div class="row d-flex justify-content-center">
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <p class="pt-2">
+                            <strong>Sign up for our Daily updates!</strong>
+                        </p>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-md-5 col-12">
+                        <!-- Email  -->
+                        <div class="form-outline form-white mb-4">
+                            <input required type="text" id="form5Example21" class="form-control" placeholder="Email Address"/>
+                            <!--                            <label class="form-label" for="form5Example21">Email address</label>-->
+                        </div>
+                    </div>
+                    <!--Grid column-->
+
+                    <!--Grid column-->
+                    <div class="col-auto">
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-outline-light mb-4">
+                            Subscribe
+                        </button>
+                    </div>
+                    <!--Grid column-->
+                </div>
+                <!--Grid row-->
             </form>
-        </div>
+        </section>
+        <!-- Section: Form -->
+
+        <!-- Section: Text -->
+        <section class="mb-4">
+            <p>
+                Training and Placement Cell, Indian Institute of Technology, Varanasi (BHU).
+            </p>
+        </section>
+        <!-- Section: Text -->
     </div>
+    <!-- Grid container -->
 
-    <div th:if="${s2 != null}" >
-        <p> HELLLOOOOO </p>
-        <div th:each="job : ${s2}">
-            <div>
-                <strong><span th:text="${(job.jobProfile).getPosition()}">Position</span></strong>
-            </div>
-            <div>
-                <strong><span th:text="${(job.company).getName()}">Name</span></strong>
-            </div>
-        </div>
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2020 Copyright:
+        <a class="text-white" href="https://www.linkedin.com/in/anant-saxena-299170199/">Anant Saxena</a>
     </div>
-
-
-
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->
 </body>
 </html>
