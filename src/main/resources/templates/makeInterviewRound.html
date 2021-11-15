@@ -54,32 +54,29 @@
                 <div id="login-column" class="col-md-6">
                     <div id="login-box" class="col-md-12 ">
 
-                        <form id="make-coding-round-form" class="form" action="/company/saveInterviewRound" method="post">
+                        <form id="make-coding-round-form" class="form-group" action="/company/saveInterviewRound" method="post">
                             <h3 class="text-center text-info">New Interview Round</h3>
-                            <div class="form-group">
-                                <div th:each="entry : ${c1}">
+                            <input type="hidden" id="jobProfileId" name="jobProfileId" value="${jobProfile.getJobProfileId}">
+                            <div th:each="entry : ${c1}" class="col-md-12">
+                                <span th:text="'For student' + ${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} "></span>
+                                <label th:for="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">Interview Meeting Link</label>
+                                <input type="text" th:id="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'meetingLink' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
 
-                                </div>
-                                <div class="form-group">
-                                    <label for="target" class="text-info">Target for Qualifiers:</label><br>
-                                    <input type="number" name="target" id="target" class="form-control">
-                                </div>
-                                <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${jobProfile.getJobProfileId}">
-                                <input type="hidden" name="roundNumber" id="roundNumber" th:value="${jobProfile.getNumberOfRounds}">
-                                <div class="form-group">
-                                    <label for="testLink" class="text-info">Link Of the Test Scheduled:</label><br>
-                                    <input type="text" name="testLink" id="testLink" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="platform" class="text-info">Platform:</label><br>
-                                    <input type="text" name="platform" id="platform" class="form-control">
-                                </div>
-                                <div class="form-group">
-                                    <label for="testDateTime" class="text-info">Date and Time:</label><br>
-                                    <input type="datetime-local" name="testDateTime" id="testDateTime" class="form-control">
-                                </div>
-                                <input type="submit" name="submit" class="btn btn-info btn-md" value="Set these interviews">
+                                <label th:for="'startDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">The interview will start at:</label>
+                                <input type="datetime-local" th:id="'startDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'startDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
+
+                                <label th:for="'endDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">The interview will end at:</label>
+                                <input type="datetime-local" th:id="'endDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'endDateTime' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
+
+                                <label th:for="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info">Choose an interviewer:</label>
+                                <select th:id="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:name="'interviewerId' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}">
+                                    <option th:each="interviewer : ${interviewers}" th:value="${interviewer.getInterviewerId}" th:text="${interviewer.getName}">
+                                        NAMEOFINTERVIEWER
+                                    </option>
+                                </select>
+
                             </div>
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="Set these interviews">
                         </form>
 
                     </div>

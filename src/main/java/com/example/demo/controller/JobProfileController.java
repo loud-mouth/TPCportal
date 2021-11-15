@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.naming.CompositeName;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.example.demo.models.Company;
@@ -62,6 +63,7 @@ public class JobProfileController {
         Company company = (Company)(session.getAttribute("company"));
         List<Interviewer> interviewers = interviewerrepo.getAll(company);
         mv.addObject("interviewers", interviewers);
+        mv.addObject("jobProfile", jobProfile);
         mv.setViewName("makeInterviewRound");
         return mv;
     }
@@ -79,12 +81,11 @@ public class JobProfileController {
     }
 
     @PostMapping("/company/saveInterviewRound")
-    public ModelAndView saveInterviewRound(@ModelAttribute("Interviewer") Interviewer interviewer, int target, HttpSession session)
+    public ModelAndView saveInterviewRound(HttpServletRequest request, HttpSession session)
     {
         System.out.println("saving new interview round....");
         ModelAndView mv = new ModelAndView();
         mv = loginmodule.redirect("company", session);
-//        JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId();
 //        List<C1> c1 = c1repo.getC1(jobProfile); //current shortlist
 //        //student whose marks are >= will be inserted into new shortlist entry
 //        System.out.println("DEATH....");

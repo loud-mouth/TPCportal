@@ -57,7 +57,6 @@ public class ShortlistController {
 
         List<C1> c1 = (List<C1>)session.getAttribute("intoTheForm");
         session.removeAttribute("intoTheForm");
-//        System.out.println("Changing score to " + shortlist.getScore());
         ModelAndView mv = new ModelAndView();
 //
 
