@@ -6,14 +6,18 @@ import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import com.example.demo.models.test;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
 import javax.naming.CompositeName;
 import javax.servlet.http.HttpSession;
 
@@ -22,6 +26,7 @@ import com.example.demo.dao.CompanyRepository;
 import java.sql.Date;
 import java.util.List;
 
+@Transactional
 @Controller
 public class CompanyController {
 
@@ -37,11 +42,38 @@ public class CompanyController {
     @Autowired
     LoginModule loginmodule;
 
+
     @PostMapping("/company/addInterviewer")
     public ModelAndView addInterviewerPost(@ModelAttribute("Interviewer") Interviewer interviewer,  HttpSession session)
     {
         ModelAndView mv = new ModelAndView();
+        test tester = new test();
+        if(!tester.validatePhoneNumber(interviewer.getPhoneNumber()))
+        {
+
+            Company company = (Company)session.getAttribute("company");
+            mv.addObject("error", "Invalid Phone Number");
+            mv.addObject("companyId", company.getCompanyId());
+            mv.addObject("company", company);
+            mv.setViewName("addInterviewer");
+            return mv;
+        }
+
         System.out.println(interviewer.getName() + " || " + interviewer.getCompanyId() + " || " + interviewer.getPhoneNumber());
+        String name = interviewer.getName();
+
+        if(!tester.validateName(name))
+        {
+            System.out.println("REDIRECTING __ BAD KEY");
+            mv.addObject("error", "Invalid Name");
+            Company company = (Company)session.getAttribute("company");
+            mv.addObject("companyId", company.getCompanyId());
+            mv.addObject("company", company);
+
+            mv.setViewName("addInterviewer");
+            return mv;
+        }
+
         interviewer = interviewerrepo.saveInterviewer(interviewer);
         mv = loginmodule.redirect("company", session);
         if(interviewer.getInterviewerId() == -1)
@@ -67,6 +99,7 @@ public class CompanyController {
 
         Company company = (Company)session.getAttribute("company");
         mv.addObject("companyId", company.getCompanyId());
+        mv.addObject("company", company);
         mv.setViewName("addInterviewer");
         return mv;
     }
@@ -84,6 +117,18 @@ public class CompanyController {
         return mv;
     }
 
+    //VALIDATE EMAIL ID
+    public static boolean isValidEmailAddress(String email) {
+        boolean result = true;
+        try {
+            InternetAddress emailAddr = new InternetAddress(email);
+            emailAddr.validate();
+        } catch (AddressException ex) {
+            result = false;
+        }
+        return result;
+    }
+
     @PostMapping("/company/login")
     public ModelAndView Loginprocess(
             @RequestParam("username") String username,
@@ -95,6 +140,13 @@ public class CompanyController {
         ModelAndView mv = new ModelAndView();
         Company maybe = new Company();
         maybe = companyrepo.getCompanyByEmailId(username);
+
+        if(!isValidEmailAddress(username))
+        {
+            mv = loginmodule.redirect("home", session);
+            mv.addObject("error", "BAD KEY : Company Email Id is not valid");
+            return mv;
+        }
 
         if(maybe.getCompanyId() == -1)
         {
@@ -140,7 +192,32 @@ public class CompanyController {
             HttpSession session
     )
     {
+
+        test tester = new test();
+
         ModelAndView mv = new ModelAndView();
+
+        if(!isValidEmailAddress(emailid))
+        {
+            mv.setViewName("companyRegister");
+            mv.addObject("error", "BAD KEY : Company Email is not valid");
+            return mv;
+        }
+
+        if(!tester.validatePhoneNumber(repcontact))
+        {
+            mv.setViewName("companyRegister");
+            mv.addObject("error", "BAD KEY : Phone number is not valid");
+            return mv;
+        }
+
+        if(!tester.validateURL(website))
+        {
+            mv.setViewName("companyRegister");
+            mv.addObject("error", "BAD KEY : URL is not valid");
+            return mv;
+        }
+
         Company company = new Company();
         company.setName(name);
         company.setRepContact(repcontact);

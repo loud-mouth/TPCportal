@@ -31,8 +31,12 @@
 <body>
 <header style="height: 10%;">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        <div th:if="${company != null} "class="container-fluid">
+            <form action="/company/login" method="post">
+                <input type="hidden" name="username" id="username" th:value="${company.getEmailId()}">
+                <input type="hidden" name="password" id="password"  th:value="${company.getPassword()}">
+                <input type="submit" class="navbar-brand mr-5 bg-dark text-white" name="Log Out" value="TPC Portal"></input>
+            </form>
         </div>
         <div class="d-flex align-items-center justify-content-end">
             <form action="/company/logout" method="post">
@@ -45,7 +49,7 @@
 
 </header>
 
-<div id="makejob" class="container mt-5">
+<div id="makejob" class="container mt-5" >
     <h3 class="text-center text-info pt-5">Create a Job Profile</h3>
     <div class="container">
         <div id="register-row" class="row justify-content-center align-items-center">
@@ -53,17 +57,17 @@
                 <div id="register-box" class="col-md-12">
                     <form id="job-creation-form" class="form" action="/company/makeJobProfile" method="post" enctype="multipart/form-data">
                         <div>
-                            <input value="1" name="jobProfileId" id="jobProfileId" type="hidden">
+                            <input required value="1" name="jobProfileId" id="jobProfileId" type="hidden">
                         </div>
                         <div>
-                            <input th:value="${companyId}" name="companyId" id="companyId" type="hidden">
+                            <input required th:value="${companyId}" name="companyId" id="companyId" type="hidden">
                         </div>
                         <div class="form-group">
                             <label for="cgpaCutoff" class="text-info">CGPA Cutoff:</label><br>
-                            <input type="number" step=0.01 min=0.00 max=10.00 name="cgpaCutoff" id="cgpaCutoff" class="form-control">
+                            <input required type="number" step=0.01 min=0.00 max=10.00 name="cgpaCutoff" id="cgpaCutoff" class="form-control">
                         </div>
                         <div>
-                            <input value="1" name="numberOfRounds" id="numberOfRounds" type="hidden">
+                            <input required value="1" name="numberOfRounds" id="numberOfRounds" type="hidden">
                         </div>
                         <div  class="form-group">
                             <label for="typeOfProfile" class="text-info">Type of Profile:</label>
@@ -74,35 +78,35 @@
                         </div>
                         <div class="form-group">
                             <label for="academicSession" class="text-info">For the Academic Session(enter 2021 for 2021-22):</label><br>
-                            <input type="number" name="academicSession" id="academicSession" class="form-control" value="2021">
+                            <input required type="number" name="academicSession" id="academicSession" class="form-control" value="2021">
                         </div>
                         <div class="form-group">
                             <label for="stipend" class="text-info">Stipend (Per month CTC in INR):</label><br>
-                            <input type="number" step=0.01 min=0.00 name="stipend" id="stipend" class="form-control">
+                            <input required type="number" step=0.01 min=0.00 name="stipend" id="stipend" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="position" class="text-info">Position Offered inside the company:</label><br>
-                            <input type="text" name="position" id="position" class="form-control">
+                            <input required type="text" name="position" id="position" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="description" class="text-info">Description of the job (in < 50 words):</label><br>
-                            <input type="text" name="description" id="description" class="form-control">
+                            <input required type="text" name="description" id="description" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="location" class="text-info">Location of Workplace (mention Online if necessary):</label><br>
-                            <input type="text" name="location" id="location" class="form-control">
+                            <input required type="text" name="location" id="location" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="duration" class="text-info">Duration of Work in months (mention 0 if FT job):</label><br>
-                            <input type="text" name="duration" id="duration" class="form-control">
+                            <input required type="text" name="duration" id="duration" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="dateTime" class="text-info">Date and Time for the presentation:</label>
-                            <input type="datetime-local" name="dateTime" id="dateTime" class="form-control">
+                            <input required type="datetime-local" name="dateTime" id="dateTime" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="meetingLink" class="text-info">Presentation Link (Enter 'NA' is not applicable):</label><br>
-                            <input type="text" name="meetingLink" id="meetingLink" class="form-control">
+                            <input required type="text" name="meetingLink" id="meetingLink" class="form-control">
                         </div>
                         <div class="form-group">
                             <ul class="list-unstyled">

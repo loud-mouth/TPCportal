@@ -31,8 +31,12 @@
 <body>
 <header style="height: 10%;">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        <div th:if="${company != null} "class="container-fluid">
+            <form action="/company/login" method="post">
+                <input type="hidden" name="username" id="username" th:value="${company.getEmailId()}">
+                <input type="hidden" name="password" id="password"  th:value="${company.getPassword()}">
+                <input type="submit" class="navbar-brand mr-5 bg-dark text-white" name="Log Out" value="TPC Portal"></input>
+            </form>
         </div>
         <div class="d-flex align-items-center justify-content-end">
             <form action="/company/logout" method="post">

@@ -31,8 +31,12 @@
 <body>
 <header style="height: 10%;">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        <div th:if="${company != null} "class="container-fluid">
+            <form action="/company/login" method="post">
+                <input type="hidden" name="username" id="username" th:value="${company.getEmailId()}">
+                <input type="hidden" name="password" id="password"  th:value="${company.getPassword()}">
+                <input type="submit" class="navbar-brand mr-5 bg-dark text-white" name="Log Out" value="TPC Portal"></input>
+            </form>
         </div>
         <div class="d-flex align-items-center justify-content-end">
             <form action="/company/logout" method="post">
@@ -47,40 +51,48 @@
 
 
 <div id="login" class="container mt-5">
-    <div class="container p-3">
-        <div th:if="${c1 != null}">
-            <div th:if="${!c1.isEmpty}">
-                <form id="change-score-form" class="form" action="/company/changescore" method="post">
-                    <h3 class="text-center text-info">Status</h3>
-                    <div style="overflow: scroll; overflow-scrolling: initial; max-height: 500px; overflow-x: hidden">
-                        <div class="form-group d-flex row" th:each="entry : ${c1}">
-                            <label th:for="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info" th:text="${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} ">Name</label>
-                            <input type="number" th:name="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:id="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control" th:value="${entry.getShortlist.getScore}">
+    <div th:if="${c1 != null}">
+        <div th:if="${!c1.isEmpty}" class="container p-3">
+                    <form id="change-score-form" class="form" action="/company/changescore" method="post">
+                        <h3 class="text-center text-info" th:text="'Current Shortlist for ' + ${jobProfile.getPosition()}">TEXT</h3>
+                        <h5 class="text-center text-info" th:text=" 'After ' + ${jobProfile.getNumberOfRounds()} + ' Rounds.. '">TEXT</h5>
+                        <div style="overflow: scroll; overflow-scrolling: initial; max-height: 500px; overflow-x: hidden">
+                            <div class="form-group d-flex row" th:each="entry : ${c1}">
+                                <label th:for="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control text-info" th:text="${entry.getStudent.getStudentId} +'@' + ${entry.getStudent.getName} + ' : ' + ${entry.getStudent.getBranch} + ', ' + ${entry.getStudent.getCourse} ">Name</label>
+                                <input type="number" th:name="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" th:id="'score' + ${entry.getShortlist.getStudentId} + '--' + ${entry.getShortlist.getRoundNumber} + '--' + ${entry.getShortlist.getJobProfileId}" class="col-6 form-control" th:value="${entry.getShortlist.getScore}">
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <input type="submit" name="submit" class="btn btn-info btn-md" value="Change Scores">
-                    </div>
-                </form>
-            </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-info btn-md" value="Change Scores">
+                        </div>
+                    </form>
+
+
+                    <div class="mt-5 border border-dark p-2" style="width: fit-content;">
+                        <i><h5>Move to next round?</h5></i>
+                        <div class="row d-flex ml-3">
+                            <div class="mr-3">
+                                <form class="form-group" method="post" th:action="@{/company/newCodingRound/{path}(path=${jobProfile.getJobProfileId})}">
+                                    <input class="btn btn-secondary" type="submit" name="coding" value="Schedule a Coding Round" />
+                                </form>
+                            </div>
+                            <div class="mr-3">
+                                <form class="form-group" method="post" th:action="@{/company/newInterviewRound/{path}(path=${jobProfile.getJobProfileId})}">
+                                    <input class="btn btn-secondary" type="submit" name="interview" value="Schedule an Interview Round" />
+                                </form>
+                            </div>
+                        </div>
+                     </div>
         </div>
-
-        <div class="mt-5 border border-dark p-2" style="width: fit-content;">
-            <i><h5>Move to next round?</h5></i>
-            <div class="row d-flex ml-3">
-                <div class="mr-3">
-                    <form class="form-group" method="post" th:action="@{/company/newCodingRound/{path}(path=${jobProfile.getJobProfileId})}">
-                        <input class="btn btn-secondary" type="submit" name="coding" value="Schedule a Coding Round" />
-                    </form>
-                </div>
-                <div class="mr-3">
-                    <form class="form-group" method="post" th:action="@{/company/newInterviewRound/{path}(path=${jobProfile.getJobProfileId})}">
-                        <input class="btn btn-secondary" type="submit" name="interview" value="Schedule an Interview Round" />
-                    </form>
-                </div>
-            </div>
-
-
+        <div th:if="${c1.isEmpty}" class="center container mt-5 p-4 marginAutoLR">
+            <br>
+            <br>
+            <br>
+            <h3> Looks like no one is appliying for this job for now :( </h3>
+            <h3> &emsp; Looks like no one is appliying for this job for now :( </h3>
+            <h3> &emsp; &emsp; Looks like no one is appliying for this job for now :( </h3>
+            <h3> &emsp; &emsp; &emsp; Looks like no one is appliying for this job for now :( </h3>
+            <h3> &emsp; &emsp; &emsp; &emsp; Looks like no one is appliying for this job for now :( </h3>
         </div>
     </div>
 </div>

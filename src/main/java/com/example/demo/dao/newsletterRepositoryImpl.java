@@ -14,16 +14,17 @@ public class newsletterRepositoryImpl implements newsletterRepository {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public void addEmailId(String emailId)
+    public int addEmailId(String emailId)
     {
         try
         {
             jdbcTemplate.update(addEmailId, emailId);
+            return 1;
         }
         catch(DataAccessException e)
         {
             System.out.println(e.getMessage());
-
+            return -1;
         }
     }
 

@@ -7,6 +7,7 @@ import com.example.demo.models.JobProfile;
 import com.example.demo.models.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
+@Transactional
 @Controller
 public class ShortlistController {
 
@@ -22,6 +24,15 @@ public class ShortlistController {
 
     @Autowired
     LoginModule loginmodule;
+
+    public boolean isURL(String url) {
+        try {
+            (new java.net.URL(url)).openStream().close();
+            return true;
+        } catch (Exception ex) {
+            return false;
+        }
+    }
 
     @PostMapping("/student/apply/{id}")
     public ModelAndView addResume(@PathVariable("id") int id,
@@ -33,8 +44,18 @@ public class ShortlistController {
         System.out.println(shortlist.getResumeLink());
         System.out.println(shortlist.getJobProfileId());
 
-        shortlist.setJobProfileId(id);
         ModelAndView mv = new ModelAndView();
+
+        String rlink = shortlist.getResumeLink();
+        System.out.println(rlink+"  testing");
+        if(!isURL(rlink))
+        {
+            mv = loginmodule.redirect("student", session);
+            mv.addObject("error", "BAD KEY : Not a working URL");
+            return mv;
+        }
+
+        shortlist.setJobProfileId(id);
         shortlistrepo.saveShortlist(shortlist);
 
         mv = loginmodule.redirect("student", session);

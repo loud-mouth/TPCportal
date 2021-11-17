@@ -31,8 +31,12 @@
 <body>
 <header class="mb-2">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        <div th:if="${company != null} "class="container-fluid">
+            <form action="/company/login" method="post">
+                <input type="hidden" name="username" id="username" th:value="${company.getEmailId()}">
+                <input type="hidden" name="password" id="password"  th:value="${company.getPassword()}">
+                <input type="submit" class="navbar-brand mr-5 bg-dark text-white" name="Log Out" value="TPC Portal"></input>
+            </form>
         </div>
         <div class="d-flex align-items-center justify-content-end">
             <form action="/company/logout" method="post">
@@ -45,26 +49,27 @@
 
 </header>
 
-
-<div id="login" class="container mt-5">
+<div id="login"  class="form-control" style="background: rgb(255,255,255);
+background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(169,220,229,1) 22%, rgba(107,195,210,1) 84%, rgba(23,162,184,1) 100%);">
     <div class="container p-3">
-
         <div id="makejob">
                 <div id="login-row" class="row justify-content-center align-items-center">
-                    <div id="login-column" class="col-md-6">
-                        <div id="login-box" class="col-md-12">
-                            <div class="row">
-                                <div th:if="${error != null}" lass="mt-auto text-red">
-                                    <div class="text-left" style="color:red">
-                                        <p th:text="${error}">hello</p>
-                                    </div>
-                                </div>
 
-                                <div th:if="${message != null}" lass="mt-auto text-red">
-                                    <div class="text-left" style="color:red">
-                                        <p th:text="${message}">hello</p>
-                                    </div>
-                                </div>
+                    <div id="login-column" class="col-md-8">
+                        <div th:if="${error != null}" class="mt-5 p-2 text-red">
+                            <div class="text-center mt-5" style="color:red">
+                                <p th:text="${error}">hello</p>
+                            </div>
+                        </div>
+
+                        <div th:if="${message != null}" class="mt-5 p-2 text-red">
+                            <div class="text-center" style="color:red">
+                                <p th:text="${message}">hello</p>
+                            </div>
+                        </div>
+                        <div id="login-box" class="col-md-12">
+                            <div class="row mt-5">
+
                                 <br>
                                 <div class="d-flex justify-content-center col-6">
                                     <a href="/company/makeJobProfile/">
@@ -84,7 +89,7 @@
 
                             <div class="mt-3" th:if="${!activejobs.isEmpty()}">
                                 <div th:each="job : ${activejobs}">
-                                    <div class="card">
+                                    <div class="card p-2 marginAutoLR mt-3" style="border-width: 7px; border-color: black;">
                                         <i><div class="card-header" th:text="${job.getTypeOfProfile}"}>Featured</div></i>
                                         <div class="card-body">
                                             <h3 class="card-title" th:text="${job.getPosition}">JP</h3>

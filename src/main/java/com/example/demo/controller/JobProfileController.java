@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,6 +24,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+@Transactional
 @Controller
 public class JobProfileController {
 
@@ -66,6 +68,8 @@ public class JobProfileController {
         ModelAndView mv = new ModelAndView();
         JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(id);
         mv.addObject("jobProfile", jobProfile);
+        Company company = (Company)session.getAttribute("company");
+        mv.addObject("company", company);
         mv.setViewName("makeCodingRound");
         return mv;
     }
@@ -83,6 +87,7 @@ public class JobProfileController {
         mv.addObject("interviewers", interviewers);
         System.out.println("hellooooo "+jobProfile.getJobProfileId());
         mv.addObject("jobProfile", jobProfile);
+        mv.addObject("company", company);
         mv.setViewName("makeInterviewRound");
         return mv;
     }
@@ -147,6 +152,18 @@ public class JobProfileController {
     @PostMapping("/company/saveCodingRound")
     public ModelAndView saveCodingRound(@ModelAttribute("CodingTest") CodingTest codingTest, int target, HttpSession session)
     {
+        test tester = new test();
+        if(!tester.validateURL(codingTest.getTestLink()))
+        {
+            ModelAndView mv = new ModelAndView();
+            int id = codingTest.getJobProfileId();
+            JobProfile jobProfile = jobprofilerepo.getJobProfilesByJobProfileId(id);
+            mv.addObject("jobProfile", jobProfile);
+            Company company = (Company)session.getAttribute("company");
+            mv.addObject("company", company);
+            mv.setViewName("makeCodingRound");
+            return mv;
+        }
         System.out.println("saving new coding round....");
         ModelAndView mv = new ModelAndView();
         mv = loginmodule.redirect("company", session);
@@ -200,6 +217,8 @@ public class JobProfileController {
         {
             System.out.println("Students found = " + c1.size());
         }
+        Company company = (Company)session.getAttribute("company");
+        mv.addObject("company", company);
         mv.setViewName("shortlist");
         return mv;
     }
@@ -217,6 +236,7 @@ public class JobProfileController {
         mv.setViewName("makeJobProfile");
         Company company = new Company();
         company = (Company)(session.getAttribute("company"));
+        mv.addObject("company", company);
         mv.addObject("companyId", company.getCompanyId());
         return mv;
     }
@@ -241,6 +261,20 @@ public class JobProfileController {
             HttpSession session
     )
     {
+
+        test tester = new test();
+        if(!tester.validateURL(ppt.getMeetingLink()))
+        {
+            ModelAndView mv = new ModelAndView();
+            mv.addObject("error", "incorrect details were provided");
+            mv.setViewName("makeJobProfile");
+            Company company = new Company();
+            company = (Company)(session.getAttribute("company"));
+            mv.addObject("company", company);
+            mv.addObject("companyId", company.getCompanyId());
+            return mv;
+        }
+
         HashMap<String, String> branchCode = new HashMap<String, String>();
         branchCode.put("Chemical Engineering and Technology", "che");
         branchCode.put("Civil Engineering", "civ");
@@ -267,6 +301,10 @@ public class JobProfileController {
         {
             mv.addObject("error", "incorrect details were provided");
             mv.setViewName("makeJobProfile");
+            Company company = new Company();
+            company = (Company)(session.getAttribute("company"));
+            mv.addObject("company", company);
+            mv.addObject("companyId", company.getCompanyId());
             return mv;
         }
         jobProfile.setJobProfileId(savedCopy);
@@ -281,6 +319,10 @@ public class JobProfileController {
         {
             mv.addObject("error", "incorrect details were provided");
             mv.setViewName("makeJobProfile");
+            Company company = new Company();
+            company = (Company)(session.getAttribute("company"));
+            mv.addObject("company", company);
+            mv.addObject("companyId", company.getCompanyId());
             return mv;
         }
         mv = loginmodule.redirect("company", session);

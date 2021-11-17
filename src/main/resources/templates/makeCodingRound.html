@@ -31,8 +31,12 @@
 <body>
 <header class="mb-2">
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand mr-5" href="/home">TPC Portal</a>
+        <div th:if="${company != null} "class="container-fluid">
+            <form action="/company/login" method="post">
+                <input type="hidden" name="username" id="username" th:value="${company.getEmailId()}">
+                <input type="hidden" name="password" id="password"  th:value="${company.getPassword()}">
+                <input type="submit" class="navbar-brand mr-5 bg-dark text-white" name="Log Out" value="TPC Portal"></input>
+            </form>
         </div>
         <div class="d-flex align-items-center justify-content-end">
             <form action="/company/logout" method="post">
@@ -59,21 +63,21 @@
                             <div class="form-group">
                                 <div class="form-group">
                                     <label for="target" class="text-info">Target for Qualifiers:</label><br>
-                                    <input type="number" name="target" id="target" class="form-control">
+                                    <input type="number" min="0.00" max="0.00" step="0.01" name="target" id="target" class="form-control">
                                 </div>
                                 <input type="hidden" name="jobProfileId" id="jobProfileId" th:value="${jobProfile.getJobProfileId}">
                                 <input type="hidden" name="roundNumber" id="roundNumber" th:value="${jobProfile.getNumberOfRounds}">
                                 <div class="form-group">
                                     <label for="testLink" class="text-info">Link Of the Test Scheduled:</label><br>
-                                    <input type="text" name="testLink" id="testLink" class="form-control">
+                                    <input required type="text" name="testLink" id="testLink" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="platform" class="text-info">Platform:</label><br>
-                                    <input type="text" name="platform" id="platform" class="form-control">
+                                    <input required type="text" name="platform" id="platform" class="form-control">
                                 </div>
                                 <div class="form-group">
                                     <label for="testDateTime" class="text-info">Date and Time:</label><br>
-                                    <input type="datetime-local" name="testDateTime" id="testDateTime" class="form-control">
+                                    <input required type="datetime-local" name="testDateTime" id="testDateTime" class="form-control">
                                 </div>
                                 <input type="submit" name="submit" class="btn btn-info btn-md" value="Create This Test">
                             </div>

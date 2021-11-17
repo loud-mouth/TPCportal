@@ -65,6 +65,7 @@ public class LoginModule {
             Company company= (Company)session.getAttribute("company");
             List<JobProfile> activejobs = jobprofilerepo.getJobProfilesByCompanyId(company.getCompanyId());
             mv.addObject("activejobs", activejobs);
+            mv.addObject("company", company);
             mv.setViewName("dashboard-company");
         }
         else
