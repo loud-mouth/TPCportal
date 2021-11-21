@@ -114,6 +114,12 @@ background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(169,220,229,1) 2
                                                         Location
                                                     </span>
                                                 </div>
+<!--                                                <div class="col-12 card-text">-->
+<!--                                                    <span th:text="'Open For the following branches : '">-->
+<!--                                                        Location-->
+<!--                                                    </span>-->
+<!--                                                    <div th:each="${job.getDuration}"-->
+<!--                                                </div>-->
                                             </div>
                                             <form id="login-form2" class="form-group mt-2" method="post" th:action="@{/company/shortlist/{path}(path=${job.getJobProfileId})}">
                                                 <input class="btn btn-success" type="submit" name="status" value="Status" />
